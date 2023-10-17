@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="csrf-token" content="{{csrf_token}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
+<!-- the fixed layout is not compatible with sidebar-mini -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  {% include 'Components/AdminSidebar.html' %}
+  {% include 'Components/AdminNavbar.html' %}
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Stages
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'AdminDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'DepartmentManagement' %}">Departments</a></li>
+              <li class="breadcrumb-item active">Stages</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+          <div class="col-xs-12">
+            <div class="box box-outline box-info">
+              <div class="box-header">
+                <div class="box-tools">
+                  <a href="{% url 'CreateStage' %}" class="btn btn-success btn-sm">&nbsp;&nbsp;Add</a>
+                </div>
+              </div>
+              <div class="box-body">
+                <table id="users" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th></th>
+                      <th>Stage</th>
+                      <th>Department</th>
+                      <th>Date Added</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in object_list %}
+                    <tr>
+                      <td class="py-1">{{ forloop.counter }}</td>
+                      <td><a class="stage" data-name="stage" href="#" data-type="text" data-pk="{{object.id}}" data-title="Enter Stage">{{ object.stage }}</a></td></td>
+                      <td>{{ object.department.name }}</td>
+                      <td>{{ object.date_added }}</td>
+                      <td>
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-success">Action</a>
+                            <button type="button" class="btn btn-success dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">
+                              <span class="caret"></span>
+                              <span class="sr-only">Department Management</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+<!--                              <li><a class="dropdown-item" href="{% url 'EditStage' object.hashid %}">Edit</a></li>-->
+                              <li class="divider"></li>
+                              <li><a class="dropdown-item" href="{% url 'DeleteStage' object.hashid %}">Delete</a></li>
+                            </ul>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- /.content -->
+  </div>
+</div>
+<!-- ./wrapper -->
+</body>
+</html>
+<script>
+  $(document).ready(function(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $('.stage').editable({
+       params: {
+          model: 'Stage',
+       },
+       url: '/Faculty/UpdateFaculty/',
+       error: function(response, newValue){
+          return response.responseText;
+       },
+       success: function(response, newValue){
+          if(!response.success) return response.error_msg;
+       }
+   });
+  });
+</script>

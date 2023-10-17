@@ -1,0 +1,167 @@
+{% load static %}
+<style>
+    .school
+    {
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+        font-family:Georgia, serif;
+    }
+    .heading
+    {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        font-family:Georgia, serif;
+    }
+    .contacts
+    {
+        text-align: center;
+        font-size: 15px;
+        font-family:Georgia, serif;
+    }
+    .header1
+    {
+        text-align: left;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .header2
+    {
+        text-align: left;
+        font-size: 15px;
+    }
+    .header3
+    {
+        text-align: left;
+        font-size: 14px;
+        padding: 5px;
+    }
+    .units
+    {
+        text-align: left;
+        font-size: 14px;
+        padding: 3px;
+    }
+</style>
+<section class="content">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+           <div class="card-body">
+             <table class="table" style="width:100%">
+                 <tr>
+                     <td rowspan="5" style="width:200px">
+                         <img src="{% static 'img/logo.png' %}" alt="logo" style="height:150px;width:150px;"/>
+                     </td>
+                     <td style="width:300px"><div class="school"><h1>SAMILSON UNIVERSITY</h1></div></td>
+                     <td rowspan="5" style="width:200px">
+                         <div style="text-align:right">
+                             {% if student.user.profile_pic != '' %}
+                                <img src="{{student.user.profile_pic.url}}" style="height:100px;width:100px"/>
+                             {% endif %}
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><div class="contacts"><label>Private Bag Samilson</label></div></td>
+                 </tr>
+                 <tr>
+                     <td><div class="contacts"><label>+254-740-400-114</label></div></td>
+                 </tr>
+                 <tr>
+                     <td><div class="contacts"><label style="font-weight:bold;">SSU/RASA/F.15</label></div></td>
+                 </tr>
+                 <tr>
+                     <td><div class="contacts"><label style="font-weight:bold;">REG{{exam_card_number}}</label></div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="heading"><h1><u>EXAMINATION CARD</u></h1></div></td>
+                 </tr>
+             </table>
+             <table class="table" style="width:100%">
+                 <tr>
+                     <td style="width:500px"><div class="header2"><label style="font-weight:bold">Stud. No:</label> {{ student.user.username }}</div></td>
+                     <td style="width:200px"><div class="header2"><label style="font-weight:bold">Stage: </label> {{stage}}</div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="2"></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px"><div class="header2"><label style="font-weight:bold">Name:</label> {{student.user.last_name|upper}}, {{student.user.first_name|upper}} {{student.user.middle_name|upper}}</div></td>
+                     <td style="width:200px"><div class="header2"><label style="font-weight:bold">Semester: </label> {{semester|upper}}</div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="2"></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px"><div class="header2"><label style="font-weight:bold">Prog: </label>  {{ student.course.name|upper }}</div></td>
+                 </tr>
+                 <tr>
+                     <td></td>
+                 </tr>
+             </table>
+             <table class="table" border="1" style="height:auto;width:100%;">
+                <thead>
+                    <tr>
+                      <th style="width:100px"><div class="header3"><u>Course Code</u></div></th>
+                      <th><div class="header3"><u>Description</u></div></th>
+                      <th><div class="header3"><u>Signature</u></div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for instance in reg_units %}
+                      <tr>
+                          <td style="width:100px"><div class="units">{{ instance.unit.unit_code }}</div></td>
+                          <td><div class="units">{{ instance.unit.name }}</div></td>
+                          <td></td>
+                      </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3">
+                            <table style="height:150px;width:100%;">
+                                <tr>
+                                    <td>
+                                        <h1 style="font-size: 20px;font-weight: bold;padding-left: 5px;padding-top: 2px;font-family:Georgia, serif;"><u>IMPORTANT</u></h1>
+                                        <p style="padding-left: 2px;font-size:12px;">The invigilator <b>MUST</b> sign the Card as he/she collects the scripts.</p>
+                                        <p style="padding-left: 2px;font-size:12px;">Any error on the names must be corrected at the office of the Dean of the school in which the candidate is registered.</p>
+                                        <p style="padding-left: 2px;font-size:12px;">Please Note: Exam cheating is a crime.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+             </table>
+             <table>
+                <tr>
+                    <td colspan="3">
+                        <p style="font-size: 15px;font-weight: bold;padding-left: 5px;padding-top: 5px;font-family:Georgia, serif;">This is to confirm that the above information is correct</p>
+                    </td>
+                </tr>
+                 <tr>
+                     <td style="width:120px"></td>
+                     <td style="width: 100px">
+                         <p style="font-size: 17px;padding-left: 15px;padding-top: 5px;font-family:Georgia, serif;">SIGN:</p>
+                     </td>
+                     <td>
+                         <p style="padding-top: 5px;font-weight: bold;font-size:15px"><b>.....................................................................................</b></p>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td style="width:120px">
+                         <p style="padding-top: 5px;font-size:15px">For Registrar:</p>
+                     </td>
+                     <td>
+                         <p style="padding-top: 5px;font-weight: bold;font-size:12px">Date and Stamp</p>
+                     </td>
+                     <td>
+                         <p style="padding-top: 5px;font-weight: bold;font-size:15px"><b><u>.....................................................................................</u></b></p>
+                     </td>
+                 </tr>
+             </table>
+           </div>
+          </div>
+        </div>
+      </div>
+</section>

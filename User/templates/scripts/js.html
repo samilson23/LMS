@@ -1,0 +1,541 @@
+{% load static %}
+
+<!-- jQuery 3 -->
+<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'plugins/iCheck/icheck.min.js' %}"></script>
+<!-- Toastr -->
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'dist/js/demo.js' %}"></script>
+
+<!-- Select2 -->
+<script src="{% static 'bower_components/select2/dist/js/select2.full.min.js' %}"></script>
+
+<!-- Ion Slider -->
+<script src="{% static 'plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+<!-- SweetAlert2 -->
+<script src="{% static 'plugins/sweetalert2/sweetalert2.min.js' %}"></script>
+<!--<script src="{% static 'admin_pro/js/select2.js' %}"></script>-->
+<script src="{% static 'admin_pro/js/moment.min.js' %}"></script>
+<script src="{% static 'admin_pro/js/bootstrap-datetimepicker.js' %}"></script>
+<!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'admin_pro/js/bootstrap-editable.js' %}"></script>
+<!-- data table JS
+    ============================================ -->
+<script src="{% static 'admin_pro/js/data-table/bootstrap-table.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/tableExport.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/data-table-active.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/bootstrap-table-editable.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/bootstrap-editable.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/bootstrap-table-resizable.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/colResizable-1.5.source.js' %}"></script>
+<script src="{% static 'admin_pro/js/data-table/bootstrap-table-export.js' %}"></script>
+<script>
+  $(function () {
+    $('#users').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+    })
+    $('#list_years_of_study').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+    })
+    $('#list_results').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      'fnRowCallback': function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.scores').editable({
+               params: {
+                  model: 'Results',
+               },
+               url: '/Faculty/UpdateFaculty/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#list_deans').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      'fnRowCallback': function(){
+            var faculties = [];
+            $.ajax({
+                  url: '{% url 'GetFaculties' %}',
+                  type: 'GET',
+            })
+            .done(function(response){
+              var json_data=JSON.parse(response)
+              for(key in json_data){
+                faculties.push({id: json_data[key]['id'], text: json_data[key]['name']})
+              }
+            });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.dean').editable({
+               params: {
+                  model: 'Dean',
+               },
+               select2: {
+                    width: 200,
+                    placeholder: 'Select Faculty',
+                    allowClear: false
+                },
+               source: faculties,
+               url: '/Dean/UpdateDean/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+            });
+      }
+    })
+    $('#list_courses').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      'fnRowCallback': function(){
+            var depts = [];
+            $.ajax({
+                  url: '{% url 'GetDepartments' %}',
+                  type: 'GET',
+            })
+            .done(function(response){
+              var json_data=JSON.parse(response)
+              for(key in json_data){
+                depts.push({id: json_data[key]['id'], text: json_data[key]['name']})
+              }
+            });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.dept').editable({
+               params: {
+                  model: 'Course',
+               },
+               select2: {
+                    width: 200,
+                    placeholder: 'Select Department',
+                    allowClear: false
+                },
+               source: depts,
+               url: '/Faculty/UpdateCourse/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+            });
+
+            $('.course').editable({
+               params: {
+                  model: 'Course',
+               },
+               url: '/Faculty/UpdateFaculty/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#list_faculties').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      'fnRowCallback': function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.faculty').editable({
+               params: {
+                  model: 'Faculty',
+               },
+               url: '/Faculty/UpdateFaculty/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#list_depts').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false,
+      'fnRowCallback': function (){
+            var faculties = [];
+            $.ajax({
+                  url: '{% url 'GetFaculties' %}',
+                  type: 'GET',
+            })
+            .done(function(response){
+              var json_data=JSON.parse(response)
+              for(key in json_data){
+                faculties.push({id: json_data[key]['id'], text: json_data[key]['name']})
+              }
+            });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.dept_faculty').editable({
+               params: {
+                  model: 'Department',
+               },
+               select2: {
+                    width: 200,
+                    placeholder: 'Select Faculty',
+                    allowClear: false
+                },
+               source: faculties,
+               url: '/Faculty/UpdateDepartment/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+            });
+
+            $('.dept').editable({
+               params: {
+                  model: 'Department',
+               },
+               url: '/Faculty/UpdateFaculty/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#list_units').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : true,
+      'fnRowCallback': function (){
+            var stages = [];
+            var course = $("#course_id").val();
+            $.ajax({
+                  url: '{% url 'GetStages' %}',
+                  type: 'POST',
+                  data: {course:course},
+            })
+            .done(function(response){
+              var json_data=JSON.parse(response)
+              for(key in json_data){
+                stages.push({id: json_data[key]['id'], text: json_data[key]['stage']})
+              }
+            });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.unit_stage').editable({
+               params: {
+                  model: 'Unit',
+               },
+               select2: {
+                    width: 200,
+                    placeholder: 'Select Stage',
+                    allowClear: false
+                },
+               source: stages,
+               url: '/Faculty/UpdateUnit/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+            });
+
+            $('.unit').editable({
+               params: {
+                  model: 'Unit',
+               },
+               url: '/Faculty/UpdateFaculty/',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#list_students').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : false,
+      'info'        : true,
+      'autoWidth'   : true,
+      'fnRowCallback': function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.user').editable({
+               params: {
+                  model: 'User',
+               },
+               url: '{% url 'UpdateUser' %}',
+               error: function(response, newValue){
+                  return response.responseText;
+               },
+               success: function(response, newValue){
+                  if(!response.success) return response.error_msg;
+               }
+           });
+      }
+    })
+    $('#semester_list').DataTable({
+      'paging'      : false,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : false,
+      'info'        : false,
+      'autoWidth'   : false,
+    })
+    $('#applications').DataTable({
+      'paging'      : false,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : false,
+      'info'        : false,
+      'autoWidth'   : false,
+    })
+  })
+</script>
+<script>
+    $(function () {
+    //Initialize Select2 Elements
+    $('.select1').select2()
+    $('.select2').select2()
+    $('.select3').select2()
+    $('.select4').select2()
+    $('.select5').select2()
+    })
+</script>
+{% if request.user.usertype == 'LECTURER' and request.path == '/Lecturer/RequestLeave' or request.user.usertype == 'HOD' and request.path == '/HOD/RequestLeave' %}
+<script>
+  $(document).ready(function(){
+       var start_date = $("#start_date").val();
+       var end_date = $("#end_date").val();
+       if (start_date != "" && end_date != ""){
+          calculate_duration()
+       }
+      $("#start_date").on("change", function(){
+       var start_date = $("#start_date").val();
+       var end_date = $("#end_date").val();
+       if (start_date != "" && end_date != ""){
+          calculate_duration()
+       }
+      });
+      $("#end_date").on("change", function(){
+       var start_date = $("#start_date").val();
+       var end_date = $("#end_date").val();
+       if (start_date != "" && end_date != ""){
+          calculate_duration()
+       }
+      });
+      $(document).on("click","#submit",function(){
+        save_to_db()
+      });
+      function calculate_duration(){
+          var start_date = $("#start_date").val();
+          var end_date = $("#end_date").val();
+          $.ajax({
+              url: '{% url 'calculate_duration' %}',
+              method: 'GET',
+              data: {start_date:start_date, end_date:end_date},
+              beforeSend: function(){
+                  $("#spinner").show();
+              },
+              success: function(response){
+                var Json_Data = JSON.parse(response)
+                for (key in Json_Data){
+                    var div_data="<input type='number' value='"+Json_Data[key]['duration']+"' class='form-control duration' disabled required />";
+                }
+                $("#cal_duration").html(div_data);
+              },
+              complete: function(){
+                $("#spinner").hide()
+              },
+          });
+      };
+      function save_to_db(){
+        var start_date = $("#start_date").val();
+        var end_date = $("#end_date").val();
+        var user_id = $("#user_id").val();
+        var reason = $("#reason").val();
+        var reliever = $("#reliever").val();
+        var duration = $(".duration").val();
+        $.ajax({
+          url: '{% url 'SubmitLeaveRequest' %}',
+          method: 'POST',
+          data: {start_date:start_date, end_date:end_date, duration:duration, reason:reason, user_id:user_id, reliever:reliever},
+          success: function(response){
+            if(response=="Submitted"){
+              Swal.fire(
+                 '',
+                 'Submitted',
+                 'success',
+              ).then(() => {
+                location.reload()
+              })
+            }
+            if(response=="Failed"){
+              Swal.fire(
+                 '',
+                 'Check that all fields are filled correctly',
+                 'info',
+              ).then(() => {
+                location.reload()
+              })
+            }
+            if(response=="Active"){
+              Swal.fire(
+                 '',
+                 'You are currently on leave',
+                 'info',
+              ).then(() => {
+                location.reload()
+              })
+            }
+            if(response=="Exists"){
+              Swal.fire(
+                 '',
+                 'You cannot apply for a leave because you have pending leave request(s)',
+                 'warning',
+              ).then(() => {
+                location.reload()
+              })
+            }
+          },
+        });
+      };
+  });
+</script>
+{% endif %}
+{% if request.user.usertype == 'STUDENT' and perms.Faculty.add_semesterreg %}
+<script>
+$(document).ready(function(){
+  getDisplayText()
+  function getDisplayText() {
+    $.ajax({
+      url: "{% url 'get_sem_reg_deadline' %}",
+      dataType: 'json',
+      success: function(data) {
+        var remainingTime = data.remaining_time;
+        if (remainingTime != 0) {
+            var deadline = data.deadline;
+            var formatted_date = moment(deadline). format("MMMM, DD, dddd, YYYY")
+            var div_data = "<marquee behavior='scroll' direction='left'><h4><span class='label bg-red'>To all continuing students Semester/Course registration is now open, Deadline will be: " +formatted_date+ ", There will be no extension.</span></h4></marquee>";
+        }
+        $("#deadline").html(div_data);
+      },
+    });
+  }
+});
+</script>
+<script>
+$(document).ready(function(){
+    UpdateTimer()
+    function UpdateTimer(){
+        $.ajax({
+            url: "{% url 'get_sem_reg_deadline' %}",
+            dataType: 'json',
+            success: function(response){
+                var deadline_date = new Date(response.deadline);
+                var current_date = new Date();
+                var timeLeft = deadline_date - current_date
+                if (timeLeft <= 0 ){
+                   $.ajax({
+                        url: '{% url 'STDRemovePermission' %}',
+                        method: 'POST',
+                        data: {codename:'add_semesterreg', group_name: 'Student_group'},
+                   });
+                }
+                else{
+                    var seconds = Math.floor((timeLeft / 1000) % 60);
+                    var minutes = Math.floor((timeLeft / 1000 / 60) % 60);
+                    var hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                    var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    $("#ctd").text(days + " days " + hours + "hours" + minutes + "minutes" + seconds + "seconds");
+                }
+            },
+        });
+    }
+    setInterval(UpdateTimer, 1000);
+});
+</script>
+{% endif %}

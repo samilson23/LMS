@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
+<!-- the fixed layout is not compatible with sidebar-mini -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  {% include 'Components/AdminSidebar.html' %}
+  {% include 'Components/AdminNavbar.html' %}
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Read
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'AdminDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="">Read</a></li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          {% include 'AdminNoticeBoard/sidebar.html' %}
+          <!-- /.col -->
+          <div class="col-md-9">
+          <div class="box box-primary box-outline">
+            <div class="box-header">
+              <h3 class="box-title">Read Notice</h3>
+
+              <div class="box-tools">
+                <a href="#" class="btn btn-tool" title="Previous"><i class="fa fa-chevron-left"></i></a>
+                <a href="#" class="btn btn-tool" title="Next"><i class="fa fa-chevron-right"></i></a>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body p-0">
+              <div class="mailbox-read-info">
+                <h5>{{notice.notice_title}}</h5>
+                <h6>From: {{notice.written_by.usertype}}
+                  <span class="mailbox-read-time float-right">{{notice.whenposted}}</span></h6>
+              </div>
+              <!-- /.mailbox-read-info -->
+              <div class="mailbox-read-message">
+                <p>Hello:&nbsp;
+                  {% if notice.addressed_to == 'STUDENT' %}
+                    Students
+                  {% endif %}
+                  {% if notice.addressed_to == 'ADMIN' %}
+                    Administrators
+                  {% endif %}
+                  {% if notice.addressed_to == 'DEAN' %}
+                    Deans of students
+                  {% endif %}
+                  {% if notice.addressed_to == 'HOD' %}
+                    Heads of departments
+                  {% endif %}
+                  {% if notice.addressed_to == 'LEC' %}
+                    Lecturers
+                  {% endif %}
+                  {% if notice.addressed_to == 'PUBLIC' %}
+                     Public
+                  {% endif %},
+                </p>
+
+                <p>{{notice.notice|safe}}</p>
+
+
+              </div>
+              <!-- /.mailbox-read-message -->
+            </div>
+            <!-- /.box-body -->
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.row -->
+      </div>
+          <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.1.0-rc
+    </div>
+    <strong>Copyright &copy; 2014-2020 <a href="">Samilson University</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

@@ -1,0 +1,263 @@
+{% load static %}
+<style type="text/css">
+     @media print{
+        @page {
+            size: A4;
+            left: 1.27cm;
+            right: 1.27cm;
+            bottom: 1.27cm;
+            top: 1.27cm;
+        }
+     }
+     @font-face {
+        font-family: "Edwardian Script ITC";
+        src: url("/static/fonts/ITCEDSCR.TTF");
+     }
+     @font-face {
+        font-family: "Algerian";
+        src: url("/static/fonts/ALGER.TTF");
+     }
+    .school
+    {
+        font-size: 16px;
+        text-align: center;
+    }
+    .title
+    {
+        font-weight: bold;
+        font-size: 13px;
+        text-align: center;
+    }
+    .heading
+    {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .units
+    {
+        text-align: left;
+        font-size: 15px;
+        padding: 3px;
+    }
+    .header2
+    {
+        text-align: left;
+        font-size: 14px;
+        padding-top: 5px;
+        padding-left: 5px;
+    }
+    .header3
+    {
+        text-align: left;
+        font-size: 14px;
+        padding: 5px;
+        font-family: Georgia, serif;
+    }
+    td {
+        height: auto;
+    }
+</style>
+<section class="content">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="box">
+           <div class="box-body">
+             <table style="width:100%">
+                 <tr>
+                     <td style="width:200px;">
+                         <p style="font-weight:700;font-family:Times New Roman;font-size:15px;">P.O. Box Private Bag,<br/>
+                             Kisumu</p>
+                     </td>
+                     <td>
+                         <div style="text-align:center;">
+                             <img src="{% static 'img/logo.png' %}" alt="logo" style="height:120px;width:120px;border-radius:4px;"/>
+                         </div>
+                     </td>
+                     <td style="width:200px">
+                         <p style="font-weight:700;font-family:Times New Roman;font-size:12px;">Tel: +254-727-425-257<br/>
+                             Fax: +254-740-400-114<br/>
+                             Email: samilsonuniversity@gmail.com<br/>
+                         </p>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="school" style="font-family: Algerian;"><h1>SAMILSON&nbsp;&nbsp;UNIVERSITY</h1></div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="title" style="font-family:Times New Roman;"><h1>PROVISIONAL ACADEMIC TRANSCRIPT</h1></div></td>
+                 </tr>
+             </table>
+             <table class="table" style="width:100%" border="1">
+                 <tr>
+                     <td colspan="3">
+                         <table class="table" style="width:100%">
+                             <tr>
+                                 <td style="width:300px"><div class="header2" style="font-family:Georgia, serif;"><label style="font-weight:bold">Reg. Number:&nbsp;</label>{{ user.username }}</div></td>
+                                 <td style="width:400px"><div class="header2" style="font-family:Georgia, serif;"><label style="font-weight:bold">Name:&nbsp;</label>{{ user.last_name|upper }}, {{ user.first_name|upper }}&nbsp;{{ user.middle_name|upper }}</div></td>
+                             </tr>
+                             <tr>
+                                 <td><div class="header2" style="font-family:Georgia, serif;"><label style="font-weight:bold">Year of Study:&nbsp;</label>{{ year.year }}</div></td>
+                                 <td><div class="header2" style="font-family:Georgia, serif;"><label style="font-weight:bold">Programme:&nbsp;</label>{{ student.course.name|upper }}</div></td>
+                             </tr>
+                             <tr>
+                                 <td><div class="header2" style="font-family:Georgia, serif;"><label style="font-weight:bold">Faculty:&nbsp;</label>SCHOOL OF {{ student.faculty.name|upper }}</div></td>
+                             </tr>
+                         </table>
+                     </td>
+                 </tr>
+                 <tr>
+                     <th style="width:100px"> <div class="header3">COURSE CODE</div></th>
+                     <th> <div class="header3">COURSE TITLE</div></th>
+                     <th> <div class="header3">GRADE</div></th>
+                 </tr>
+                 <tr>
+                     <td style="width:100px">
+                         <table class="table" style="width:100%">
+                             {% for instance in queryset %}
+                                <tr>
+                                    <td style="width:100px"><div class="units">{{ instance.unit.unit_code }}</div></td>
+                                </tr>
+                             {% endfor %}
+                         </table>
+                     </td>
+                     <td style="width:500px">
+                         <table class="table" style="width:100%">
+                             {% for instance in queryset %}
+                                <tr>
+                                   <td style="width:400px"><div class="units">{{ instance.unit.name }}</div></td>
+                                </tr>
+                             {% endfor %}
+                         </table>
+                     </td>
+                     <td style="width:100px">
+                         <table class="table" style="width:100%">
+                             {% for instance in queryset %}
+                                <tr>
+                                    <td style="width:100px"><div class="units">{{ instance.grade }}</div></td>
+                                </tr>
+                             {% endfor %}
+                         </table>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td colspan="2" style="padding:3px;"><div style="font-size:14px;font-family:Georgia, serif;"><b>CURRENT AVERAGE:</b></div></td>
+                     <td><div class="units" style="font-family:Georgia, serif;">{{ grade_average }}</div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="3" style="padding:3px;"><div style="font-size:14px;font-family:Georgia, serif;"><b>RECOMMENDATION:</b>
+                        {% if count > 0 %}
+                            {% if year.year == 'Year 1' %}
+                                TO PROCEED TO SECOND YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED 
+                            {% elif year.year == 'Year 2' %}
+                                TO PROCEED TO THIRD YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED 
+                            {% elif year.year == 'Year 3' %}
+                                TO PROCEED TO FOURTH YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED 
+                            {% elif year.year == 'Year 4' %}
+                                {% if student.course.duration == 4 %}
+                                    RESIT FAILED COURSES WHEN NEXT OFFERED 
+                                {% else %}
+                                    TO PROCEED TO FIFTH YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED 
+                                {% endif %}
+                            {% elif year.year == 'Year 5' %}
+                                TO PROCEED TO SIXTH YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED 
+                            {% elif year.year == 'Year 6' %}
+                                {% if student.course.duration == 6 %}
+                                    RESIT FAILED COURSES WHEN NEXT OFFERED
+                                {% else %}
+                                    TO PROCEED TO SEVENTH YEAR OF STUDY BUT RESIT FAILED COURSES WHEN NEXT OFFERED
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% if year.year == 'Year 1' %}
+                                TO PROCEED TO SECOND YEAR OF STUDY
+                            {% elif year.year == 'Year 2' %}
+                                TO PROCEED TO THIRD YEAR OF STUDY
+                            {% elif year.year == 'Year 3' %}
+                                TO PROCEED TO FOURTH YEAR OF STUDY
+                            {% elif year.year == 'Year 4' %}
+                                {% if student.course.duration == 4 %}
+                                    {% if count1 == 0 %}
+                                        TO GRADUATE SUBJECT TO FULFILLMENT OF OTHER GRADUATION REQUIREMENTS
+                                    {% else %}
+                                        RESIT FAILED COURSES WHEN NEXT OFFERED
+                                    {% endif %}
+                                {% else %}
+                                    TO PROCEED TO FIFTH YEAR OF STUDY
+                                {% endif %}
+                            {% elif year.year == 'Year 5' %}
+                                TO PROCEED TO SIXTH YEAR OF STUDY
+                            {% elif year.year == 'Year 6' %}
+                                {% if student.course.duration == 6 %}
+                                    {% if count1 == 0 %}
+                                        TO GRADUATE SUBJECT TO FULFILLMENT OF OTHER GRADUATION REQUIREMENTS
+                                    {% else %}
+                                        RESIT FAILED COURSES WHEN NEXT OFFERED
+                                    {% endif %}
+                                {% else %}
+                                    TO PROCEED TO SEVENTH YEAR OF STUDY
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                     </div></td>
+                 </tr>
+             </table>
+             <table style="width:100%">
+                 <tr>
+                     <td colspan="11">
+                         <p style="font-size: 14px;font-weight: bold;padding-left: 15px;padding-top: 15px;font-family:Georgia, serif;">Legend:</p>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td></td>
+                     <td><p style="font-size:12px;">70%-100%</p></td>
+                     <td style="width:30px;"><p style="font-size:12px;">A</p></td>
+                     <td><p style="font-size:12px;">EXCELLENT</p></td>
+                     <td><p style="font-size:12px;">50%-59%</p></td>
+                     <td style="width:30px;"><p style="font-size:12px;">C</p></td>
+                     <td><p style="font-size:12px;">GOOD</p></td>
+                     <td><p style="font-size:12px;">0%-39%</p></td>
+                     <td style="width:30px;"><p style="font-size:12px;">E</p></td>
+                     <td><p style="font-size:12px;">FAIL</p></td>
+                     <td></td>
+                 </tr>
+                 <tr>
+                     <td style="padding-bottom: 10px;"></td>
+                     <td style="padding-bottom: 10px;"><p style="font-size:12px;">60%-69%</p></td>
+                     <td style="width:30px;padding-bottom: 10px;"><p style="font-size:12px;">B</p></td>
+                     <td style="padding-bottom: 10px;"><p style="font-size:12px;">VERY GOOD</p></td>
+                     <td style="padding-bottom: 10px;"><p style="font-size:12px;">40%-49%</p></td>
+                     <td style="width:30px;padding-bottom: 10px;"><p style="font-size:12px;">D</p></td>
+                     <td style="padding-bottom: 10px;"><p style="font-size:12px;">FAIR</p></td>
+                     <td style="padding-bottom: 10px;"></td>
+                     <td style="width:30px;padding-bottom: 10px;"><p style="font-size:12px;">#</p></td>
+                     <td style="padding-bottom: 10px;"><p style="font-size:12px;">AUDITED</p></td>
+                     <td style="padding-bottom: 10px;"></td>
+                 </tr>
+             </table>
+             <table style="width:100%">
+                 <tr>
+                     <td style="width: 100px">
+                         <p style="font-size: 14px;font-weight: bold;padding-left: 15px;padding-top: 15px;font-family:Georgia, serif;">SIGNED:</p>
+                     </td>
+                     <td>
+                         <p style="padding-top: 15px;"><b>.....................................................................................</b></p>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td></td>
+                     <td>
+                         <p style="font-size: 14px;font-weight: bold;padding-top: 5px;font-family:Georgia, serif;">Dean, SCHOOL OF {{ student.faculty.name|upper }}</p>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td colspan="2">
+                         <p style="font-size: 14px;font-weight: bold;padding-left: 15px;padding-top: 15px;font-family:Georgia, serif;">Date Issued: ______________________________________</p>
+                     </td>
+                 </tr>
+             </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</section>

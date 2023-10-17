@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  {% include 'scripts/css.html' %}
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<div class="wrapper">
+
+  {% include 'STDComponents/Navbar.html' %}
+  {% include 'STDComponents/Sidebar.html' %}
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1 class="text-center">
+        Exam Cards
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'STDDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="">Exam Cards</a></li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="pdf-viewer-area mg-b-40">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                        {% if count > 0 %}
+                            <div class="box box-success box-outline">
+                                <div class="box-header">
+                                    <div class="box-title">
+                                        <h4 class="box-title" style="color:red;">Please Evaluate your instructor(s) first</h4>
+                                    </div>
+                                    <div class="box-tools">
+                                        <form method="post" action="{% url 'SkipLecEvaluation' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success btn-sm">Skip Lecturer Evaluation</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="semester_list" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Unit Code</th>
+                                                <th>Unit</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for instance in queryset %}
+                                                <tr>
+                                                    <td>{{instance.unit.unit_code}}</td>
+                                                    <td>{{instance.unit.name}}</td>
+                                                    <td>
+                                                        <a href="{% url 'LecturerEvaluation' %}" class="btn btn-info btn-sm">Evaluate</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="pdf-single-pro shadow-reset">
+                                <div class="media" style="background-color: rgb(255, 255, 255); width: 700px;">
+                                    <iframe width="700" height="450" src="{% url 'fetch_exam_card' %}"></iframe>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+            </div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

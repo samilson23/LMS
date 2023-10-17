@@ -1,0 +1,112 @@
+{% load static %}
+{% load i18n %}
+{% load encode_static %}
+<style>
+    .school
+    {
+        font-weight: bold;
+        font-size: 15px;
+        text-align: center;
+    }
+    .heading
+    {
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .contacts
+    {
+        text-align: center;
+        font-size: 15px;
+    }
+    .header1
+    {
+        text-align: left;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .header2
+    {
+        text-align: left;
+        font-size: 15px;
+    }
+    .header3
+    {
+        text-align: left;
+        font-size: 14px;
+        padding: 5px;
+    }
+    .units
+    {
+        text-align: left;
+        font-size: 14px;
+        padding: 3px;
+    }
+    .image{
+        text-align: center;
+    }
+</style>
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+           <div class="box-body">
+             <table class="table" style="width:100%">
+                 <tr>
+                     <td colspan="3">
+                         <div style="text-align:center;">
+                             <img src="{% static 'img/logo.png' %}" alt="logo" style="height:120px;width:120px;border-radius:4px;"/>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px" colspan="3"><div class="school"><h1>SAMILSON UNIVERSITY</h1></div></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px" colspan="3"><div class="contacts"><label>+254 740 400114</label></div></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px" colspan="3"><div class="contacts"><label>sammymasinde830@gmail.com</label></div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="heading"><h1><u>EXAMINATION MARKS</u></h1></div></td>
+                 </tr>
+             </table>
+             <table class="table" style="width:100%">
+                 <tr>
+                     <td style="width:500px"><div class="header2"><label style="font-weight:bold">Course:</label> {{unit.course.name}}</div></td>
+                     <td style="width:200px"><div class="header2"><label style="font-weight:bold">Stage: </label> {{unit.stage.stage}}</div></td>
+                 </tr>
+                 <tr>
+                     <td style="width:500px"><div class="header2"><label style="font-weight:bold">Name: </label> {{unit.name}}</div></td>
+                     <td style="width:200px"><div class="header2"><label style="font-weight:bold">Unit Code:</label> {{ unit.unit_code }}</div></td>
+                 </tr>
+             </table>
+             <table class="table" border="1" style="height:auto;width:100%;">
+                <thead>
+                    <tr>
+                      <th><div class="header3"><u>Admission Number</u></div></th>
+                      <th><div class="header3"><u>Cat Marks</u></div></th>
+                      <th><div class="header3"><u>Exam Marks</u></div></th>
+                      <th><div class="header3"><u>Grade</u></div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for instance in results %}
+                      <tr>
+                          <td style="width:200px"><div class="units">{{ instance.student.username }}</div></td>
+                          <td><div class="units">{{ instance.cat_mark }}</div></td>
+                          <td><div class="units">{{ instance.exam_mark }}</div></td>
+                          <td><div class="units">{{ instance.grade }}</div></td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+             </table>
+           </div>
+          </div>
+        </div>
+      </div>
+</section>

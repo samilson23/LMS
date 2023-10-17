@@ -1,0 +1,39 @@
+{% load static %}
+{% url 'HODDashboard' as HODDashboard %}
+{% url 'HODListUnits' as HODListUnits %}
+{% url 'HODLeaves' as HODLeaves %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="{% static 'img/logo.png' %}" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>{{request.user.first_name}} {{request.user.last_name}}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li class="{% if request.path == HODDashboard %} active {% endif %}">
+          <a href="{% url 'HODDashboard' %}">
+            <i class="fa fa-dashboard"></i><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="{% if request.path == HODListUnits %} active {% endif %}">
+            <a href="{% url 'HODListUnits' %}">
+              <i class=" fa fa-book"></i>Units
+            </a>
+        </li>
+        <li class="{% if request.path == HODLeaves %} active {% endif %}">
+            <a href="{% url 'HODLeaves' %}">
+                <i class=" fa fa-calendar-times-o"></i><span>Leave Requests</span>
+            </a>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
