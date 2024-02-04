@@ -25,6 +25,7 @@ django-inplaceedit
 django-js-asset
 django-mptt
 django-paypal
+django-pesapal
 django-phonenumber-field
 django-session-timeout
 django-uuidfield
