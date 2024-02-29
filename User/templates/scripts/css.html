@@ -1,0 +1,1095 @@
+{% load static %}
+
+<!-- Bootstrap 3.3.7 -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
+<!-- Ionicons -->
+<link rel="stylesheet" href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
+<!-- Theme style -->
+<link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+<!-- iCheck -->
+<link rel="stylesheet" href="{% static 'plugins/iCheck/square/blue.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+   folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{% static 'bower_components/select2/dist/css/select2.min.css' %}">
+<!-- Ion Slider -->
+<link rel="stylesheet" href="{% static 'plugins/ion-rangeslider/css/ion.rangeSlider.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
+<link rel="stylesheet" href="{% static 'admin_pro/css/bootstrap-editable.css' %}">
+<link rel="stylesheet" href="{% static 'admin_pro/css/x-editor-style.css' %}">
+<link href="{% static 'duallist/dist/dual-listbox.css' %}" rel="stylesheet" />
+<!-- fullCalendar -->
+<link rel="stylesheet" href="{% static 'bower_components/fullcalendar/dist/fullcalendar.min.css' %}">
+<link rel="stylesheet" href="{% static 'bower_components/fullcalendar/dist/fullcalendar.print.min.css' %}" media="print">
+
+<style>
+    #div_id_promotes_critical_thinking input[type="radio"] {
+    display: none;
+  }
+  #div_id_promotes_critical_thinking .form-check{
+    display: inline-flex;
+  }
+   #div_id_promotes_critical_thinking .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_promotes_critical_thinking .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_promotes_critical_thinking .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_promotes_critical_thinking .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+  <style>
+    #div_id_ties_in_primary_objectives_of_the_course input[type="radio"] {
+    display: none;
+  }
+  #div_id_ties_in_primary_objectives_of_the_course .form-check{
+    display: inline-flex;
+  }
+   #div_id_ties_in_primary_objectives_of_the_course .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_ties_in_primary_objectives_of_the_course .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_ties_in_primary_objectives_of_the_course .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_ties_in_primary_objectives_of_the_course .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+  <style>
+    #div_id_explains_concepts_clearly input[type="radio"] {
+    display: none;
+  }
+  #div_id_explains_concepts_clearly .form-check{
+    display: inline-flex;
+  }
+   #div_id_explains_concepts_clearly .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_explains_concepts_clearly .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_explains_concepts_clearly .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_explains_concepts_clearly .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+  <style>
+    #div_id_uses_concrete_examples_of_concepts input[type="radio"] {
+    display: none;
+  }
+  #div_id_uses_concrete_examples_of_concepts .form-check{
+    display: inline-flex;
+  }
+   #div_id_uses_concrete_examples_of_concepts .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_uses_concrete_examples_of_concepts .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_uses_concrete_examples_of_concepts .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_uses_concrete_examples_of_concepts .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_gives_multiple_examples input[type="radio"] {
+    display: none;
+  }
+  #div_id_gives_multiple_examples .form-check{
+    display: inline-flex;
+  }
+   #div_id_gives_multiple_examples .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_gives_multiple_examples .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_gives_multiple_examples .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_gives_multiple_examples .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_points_out_practical_applications input[type="radio"] {
+    display: none;
+  }
+  #div_id_points_out_practical_applications .form-check{
+    display: inline-flex;
+  }
+   #div_id_points_out_practical_applications .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_points_out_practical_applications .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_points_out_practical_applications .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_points_out_practical_applications .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+
+<style>
+    #div_id_stresses_important_concepts input[type="radio"] {
+    display: none;
+  }
+  #div_id_stresses_important_concepts .form-check{
+    display: inline-flex;
+  }
+   #div_id_stresses_important_concepts .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_stresses_important_concepts .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_stresses_important_concepts .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_stresses_important_concepts .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+
+<style>
+    #div_id_repeats_difficult_ideas input[type="radio"] {
+    display: none;
+  }
+  #div_id_repeats_difficult_ideas .form-check{
+    display: inline-flex;
+  }
+   #div_id_repeats_difficult_ideas .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_repeats_difficult_ideas .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_repeats_difficult_ideas .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_repeats_difficult_ideas .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_encourages_questions_and_comments input[type="radio"] {
+    display: none;
+  }
+  #div_id_encourages_questions_and_comments .form-check{
+    display: inline-flex;
+  }
+   #div_id_encourages_questions_and_comments .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_encourages_questions_and_comments .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_encourages_questions_and_comments .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_encourages_questions_and_comments .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_answers_questions_clearly input[type="radio"] {
+    display: none;
+  }
+  #div_id_answers_questions_clearly .form-check{
+    display: inline-flex;
+  }
+   #div_id_answers_questions_clearly .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_answers_questions_clearly .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_answers_questions_clearly .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_answers_questions_clearly .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_available_to_students_after_class input[type="radio"] {
+    display: none;
+  }
+  #div_id_available_to_students_after_class .form-check{
+    display: inline-flex;
+  }
+   #div_id_available_to_students_after_class .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_available_to_students_after_class .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_available_to_students_after_class .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_available_to_students_after_class .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_asks_questions_of_class input[type="radio"] {
+    display: none;
+  }
+  #div_id_asks_questions_of_class .form-check{
+    display: inline-flex;
+  }
+   #div_id_asks_questions_of_class .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_asks_questions_of_class .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_asks_questions_of_class .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_asks_questions_of_class .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+  </style>
+
+<style>
+    #div_id_facilitates_discussions_during_lecture input[type="radio"] {
+    display: none;
+  }
+  #div_id_facilitates_discussions_during_lecture .form-check{
+    display: inline-flex;
+  }
+   #div_id_facilitates_discussions_during_lecture .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_facilitates_discussions_during_lecture .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_facilitates_discussions_during_lecture .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_facilitates_discussions_during_lecture .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+
+<style>
+    #div_id_proceeds_at_good_pace_for_topic input[type="radio"] {
+    display: none;
+  }
+  #div_id_proceeds_at_good_pace_for_topic .form-check{
+    display: inline-flex;
+  }
+   #div_id_proceeds_at_good_pace_for_topic .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_proceeds_at_good_pace_for_topic .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_proceeds_at_good_pace_for_topic .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_proceeds_at_good_pace_for_topic .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_stays_on_theme_of_lecture input[type="radio"] {
+    display: none;
+  }
+  #div_id_stays_on_theme_of_lecture .form-check{
+    display: inline-flex;
+  }
+   #div_id_stays_on_theme_of_lecture .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_stays_on_theme_of_lecture .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_stays_on_theme_of_lecture .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_stays_on_theme_of_lecture .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_states_lecture_objectives input[type="radio"] {
+    display: none;
+  }
+  #div_id_states_lecture_objectives .form-check{
+    display: inline-flex;
+  }
+   #div_id_states_lecture_objectives .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_states_lecture_objectives .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_states_lecture_objectives .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_states_lecture_objectives .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+
+<style>
+    #div_id_gives_preliminary_overview_of_lecture input[type="radio"] {
+    display: none;
+  }
+  #div_id_gives_preliminary_overview_of_lecture .form-check{
+    display: inline-flex;
+  }
+   #div_id_gives_preliminary_overview_of_lecture .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_gives_preliminary_overview_of_lecture .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_gives_preliminary_overview_of_lecture .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_gives_preliminary_overview_of_lecture .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+
+<style>
+    #div_id_signals_transition_to_new_topic input[type="radio"] {
+    display: none;
+  }
+  #div_id_signals_transition_to_new_topic .form-check{
+    display: inline-flex;
+  }
+   #div_id_signals_transition_to_new_topic .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_signals_transition_to_new_topic .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_signals_transition_to_new_topic .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_signals_transition_to_new_topic .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+
+<style>
+    #div_id_explains_how_each_topic_fits_in input[type="radio"] {
+    display: none;
+  }
+  #div_id_explains_how_each_topic_fits_in .form-check{
+    display: inline-flex;
+  }
+   #div_id_explains_how_each_topic_fits_in .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_explains_how_each_topic_fits_in .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_explains_how_each_topic_fits_in .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_explains_how_each_topic_fits_in .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_projects_confidence input[type="radio"] {
+    display: none;
+  }
+  #div_id_projects_confidence .form-check{
+    display: inline-flex;
+  }
+   #div_id_projects_confidence .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_projects_confidence .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_projects_confidence .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_projects_confidence .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_speaks_expressively_or_emphatically input[type="radio"] {
+    display: none;
+  }
+  #div_id_speaks_expressively_or_emphatically .form-check{
+    display: inline-flex;
+  }
+   #div_id_speaks_expressively_or_emphatically .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_speaks_expressively_or_emphatically .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_speaks_expressively_or_emphatically .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_speaks_expressively_or_emphatically .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_moves_about_while_lecturing input[type="radio"] {
+    display: none;
+  }
+  #div_id_moves_about_while_lecturing .form-check{
+    display: inline-flex;
+  }
+   #div_id_moves_about_while_lecturing .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_moves_about_while_lecturing .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_moves_about_while_lecturing .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_moves_about_while_lecturing .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_gestures_while_speaking input[type="radio"] {
+    display: none;
+  }
+  #div_id_gestures_while_speaking .form-check{
+    display: inline-flex;
+  }
+   #div_id_gestures_while_speaking .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_gestures_while_speaking .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_gestures_while_speaking .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_gestures_while_speaking .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_shows_facial_expression input[type="radio"] {
+    display: none;
+  }
+  #div_id_shows_facial_expression .form-check{
+    display: inline-flex;
+  }
+   #div_id_shows_facial_expression .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_shows_facial_expression .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_shows_facial_expression .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_shows_facial_expression .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+
+<style>
+    #div_id_uses_humor input[type="radio"] {
+    display: none;
+  }
+  #div_id_uses_humor .form-check{
+    display: inline-flex;
+  }
+   #div_id_uses_humor .form-check-label {
+      position: relative;
+      color: #4189e0;
+      font-family: "Poppins", sans-Serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.1em;
+      padding: 0.3em 1em;
+      margin: 2px;
+      border: 2px solid #4189e0;
+      border-radius: 0.5em;
+    }
+
+    #div_id_uses_humor .form-check-label:before{
+      content: "";
+      height: 1em;
+      width: 1em;
+      border: 2px solid #4187e0;
+      border-radius: 50%;
+    }
+
+    #div_id_uses_humor .form-check-input:checked + .form-check-label:before{
+      height: 1em;
+      width: 1em;
+      border: 0.2em solid #ffffff;
+      background-color: #4187e0;
+    }
+
+    #div_id_uses_humor .form-check-input:checked + .form-check-label{
+      color: #ffffff;
+      background-color: #17a2b8;
+    }
+</style>
+<style>
+  .floating-card {
+      position: fixed;
+      top: 300px;
+      right: 0;
+      margin: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 200px;
+      box-shadow: 3px 3px 5px #888888;
+      z-index: 1;
+  }
+</style>

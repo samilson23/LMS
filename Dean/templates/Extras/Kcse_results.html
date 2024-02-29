@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+{% load filename %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<!-- ADD THE CLASS fixed TO GET A FIXED HEADER AND SIDEBAR LAYOUT -->
+<!-- the fixed layout is not compatible with sidebar-mini -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  {% include 'Components/DeanSidebar.html' %}
+  {% include 'Components/DeanNavbar.html' %}
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>KCSE Results</h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'DeanDashBoard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="{% url 'TransferRequests' %}"><i class="fa fa-exchange"></i>Transfer Requests</a></li>
+        <li><a href=""><i class="fa fa-graduation-cap"></i>KCSE Results</a></li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+          <div class="col-xs-6">
+            <div class="box box-outline box-info">
+              <div class="box-header">
+                <div class="box-title">
+                  <h4 class="box-title">KCSE Results</h4>
+                </div>
+                <div class="box-tools">
+                    <a href="{% url 'ApproveTransferRequest' result_slip.student.hashid %}" class="btn btn-success btn-sm">Approve</a>&nbsp;&nbsp;
+                    <a href="{% url 'RejectTransferRequest' result_slip.student.hashid %}" class="btn btn-danger btn-sm">Reject</a>
+                </div>
+              </div>
+              <div class="box-body">
+                <table id="users" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th>Subject</th>
+                      <th>Grade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in queryset %}
+                    <tr>
+                      <td>{{ object.subject }}</td>
+                      <td>{{ object.grade }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+              <div class="box-footer">
+              <ul class="mailbox-attachments clearfix">
+                <li>
+                  <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+
+                  <div class="mailbox-attachment-info">
+                    <a href="{% url 'download_result_slip' result_slip.student.hashid %}" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> {{result_slip.kcse_result_slip|name}}</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

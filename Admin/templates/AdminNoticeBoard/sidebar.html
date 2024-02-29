@@ -1,0 +1,29 @@
+<div class="col-md-3">
+    <a href="{% url 'AdminCompose' %}" class="btn btn-primary btn-block margin-bottom">Compose</a>
+
+    <div class="box box-solid">
+      <div class="box-header">
+        <h3 class="box-title">Folders</h3>
+
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <ul class="nav nav-pills nav-stacked">
+          <li>
+            <a href="{% url 'AdminInbox' %}">
+              <i class="fa fa-inbox"></i> Inbox
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'AdminSentNotices' %}">
+              <i class="fa fa-envelope"></i> Sent
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.box-body -->
+    </div>
+</div>

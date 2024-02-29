@@ -1,0 +1,78 @@
+{% load static %}
+{% url 'AdminDashboard' as AdminDashboard %}
+{% url 'AdminUserManagement' as AdminUserManagement %}
+{% url 'AdminUserProfile' pk=queryset.hashid as AdminUserProfile %}
+{% url 'FacultyManagement' as FacultyManagement %}
+{% url 'DepartmentManagement' as DepartmentManagement %}
+{% url 'CourseManagement' as CourseManagement %}
+{% url 'AdminCompose' as AdminCompose %}
+{% url 'UserLog' as UserLog %}
+{% url 'YearsOfStudy' as YearsOfStudy %}
+{% url 'StudentRegistrations' as StudentRegistrations %}
+{% url 'StudentResults' pk=year.hashid as StudentResults %}
+{% url 'RegisteredUnits' pk=student.hashid stage=stage.hashid  as RegisteredUnits %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="{% static 'img/logo.png' %}" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>{{request.user.first_name}} {{request.user.last_name}}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li class="{% if request.path == AdminDashboard %} active {% endif %}">
+          <a href="{% url 'AdminDashboard' %}">
+            <i class="fa fa-dashboard"></i><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="{% if request.path == AdminUserManagement %} active {% endif %} {% if request.path == AdminUserProfile %} active {% endif %}">
+            <a href="{% url 'AdminUserManagement' %}">
+              <i class=" fa fa-users"></i>User Management
+            </a>
+          </li>
+          <li class="{% if request.path == FacultyManagement %} active {% endif %}">
+            <a href="{% url 'FacultyManagement' %}">
+              <i class=" fa fa-university"></i><span>Faculties</span>
+            </a>
+          </li>
+          <li class="{% if request.path == DepartmentManagement %} active {% endif %}">
+            <a href="{% url 'DepartmentManagement' %}">
+              <i class=" fa fa-building"></i><span>Departments</span>
+            </a>
+          </li>
+          <li class="{% if request.path == CourseManagement %} active {% endif %}">
+            <a href="{% url 'CourseManagement' %}">
+              <i class=" fa fa-book"></i><span>Courses</span>
+            </a>
+          </li>
+          <li class="{% if request.path == StudentRegistrations %} active {% endif %} {% if request.path == RegisteredUnits %} active {% endif %}">
+            <a href="{% url 'StudentRegistrations' %}">
+              <i class="glyphicon glyphicon-check"></i><span>Registered Semesters</span>
+            </a>
+          </li>
+          <li class="{% if request.path == YearsOfStudy %} active {% endif %}{% if request.path == StudentResults %} active {% endif %}">
+            <a href="{% url 'YearsOfStudy' %}">
+              <i class="fa fa-registered"></i><span>Results Management</span>
+            </a>
+          </li>
+          <li class="{% if request.path == AdminCompose %} active {% endif %}">
+            <a href="{% url 'AdminCompose' %}">
+              <i class=" fa fa-envelope"></i><span>Notice Board</span>
+            </a>
+          </li>
+          <li class="{% if request.path == UserLog %} active {% endif %}">
+            <a href="{% url 'UserLog' %}">
+              <i class=" fa fa-archive"></i><span>Logs</span>
+            </a>
+          </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>

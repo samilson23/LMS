@@ -1,0 +1,100 @@
+{% load static %}
+{% url 'RegisteredSemesters' as RegisteredSemesters %}
+{% url 'STDDashboard' as STDDashboard %}
+{% url 'SemesterRegistration' as SemesterRegistration %}
+{% url 'UnitRegistration' as UnitRegistration %}
+{% url 'ProvisionalTranscript' as ProvisionalTranscript %}
+{% url 'ExamCard' as ExamCard %}
+{% url 'ResitExamRegistration' as ResitExamRegistration %}
+{% url 'LecturerEvaluation' as LecturerEvaluation %}
+{% url 'FeePayment' as FeePayment %}
+{% url 'Checkout' as Checkout %}
+{% url 'InterSchoolTransfer' as InterSchoolTransfer %}
+{% url 'SupplementaryExamRegistration' as SupplementaryExamRegistration %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="{% static 'img/logo.png' %}" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>{{request.user.first_name}} {{request.user.last_name}}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li class="{% if request.path == STDDashboard %} active {% endif %}">
+          <a href="{% url 'STDDashboard' %}">
+            <i class="fa fa-dashboard"></i><span> Dashboard</span>
+          </a>
+        </li>
+        <li class="treeview {% if request.path == FeePayment %} menu-open {% endif %}{% if request.path == Checkout %} menu-open {% endif %}">
+          <a href="#">
+            <i class="fa fa-bank"></i> <span>Financials</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: {% if request.path == FeePayment %} block; {% endif %}{% if request.path == Checkout %} block; {% endif %}">
+            <li class="{% if request.path == Checkout %} active {% endif %}{% if request.path == FeePayment %} active {% endif %}"><a href="{% url 'FeePayment' %}"><i class="fa fa-circle-o"></i> Fee Payment</a></li>
+            <li class=""><a href=""><i class="fa fa-circle-o"></i> Fee Structure</a></li>
+            <li class=""><a href=""><i class="fa fa-circle-o"></i> Payment Receipts</a></li>
+            <li class=""><a href=""><i class="fa fa-circle-o"></i> Fee Statement</a></li>
+          </ul>
+        </li>
+        <li class="treeview {% if request.path == UnitRegistration %} menu-open {% endif %} {% if request.path == ProvisionalTranscript %} menu-open {% endif %} {% if request.path == ExamCard %} menu-open {% endif %}">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Academics</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: {% if request.path == UnitRegistration %} block; {% endif %} {% if request.path == ProvisionalTranscript %} block; {% endif %} {% if request.path == ExamCard %} block; {% endif %}">
+            <li class="{% if request.path == UnitRegistration %} active {% endif %}"><a href="{% url 'UnitRegistration' %}"><i class="fa fa-circle-o"></i> Unit Registration</a></li>
+            <li class="{% if request.path == ProvisionalTranscript %} active {% endif %}"><a href="{% url 'ProvisionalTranscript' %}"><i class="fa fa-circle-o"></i> Provisional Transcripts</a></li>
+            <li class="{% if request.path == ExamCard %} active {% endif %}"><a href="{% url 'ExamCard' %}"><i class="fa fa-circle-o"></i> Exam Cards</a></li>
+          </ul>
+        </li>
+        <li class="treeview {% if request.path == ResitExamRegistration %} menu-open {% endif %} {% if request.path == SupplementaryExamRegistration %} menu-open {% endif %}">
+          <a href="#">
+            <i class="fa fa-refresh"></i> <span>Special Exams</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: {% if request.path == ResitExamRegistration %} block; {% endif %} {% if request.path == SupplementaryExamRegistration %} block; {% endif %}">
+            <li class="{% if request.path == ResitExamRegistration %} active {% endif %}"><a href="{% url 'ResitExamRegistration' %}"><i class="fa fa-circle-o"></i> Resit Exam Registration</a></li>
+            <li class="{% if request.path == SupplementaryExamRegistration %} active {% endif %}"><a href="{% url 'SupplementaryExamRegistration' %}"><i class="fa fa-circle-o"></i> Special Exam Registration</a></li>
+          </ul>
+        </li>
+        <li class="{% if request.path == InterSchoolTransfer %} active {% endif %}">
+          <a href="{% url 'InterSchoolTransfer' %}">
+            <i class="fa fa-exchange"></i> <span>InterSchool Transfer</span>
+          </a>
+        </li>
+        <li class="{% if request.path == RegisteredSemesters %} active {% endif %}">
+          <a href="{% url 'RegisteredSemesters' %}">
+            <i class="glyphicon glyphicon-check"></i> <span>Registered Semesters</span>
+          </a>
+        </li>
+        <li class="header">PERIODIC ACTIVITIES</li>
+        {% if perms.Faculty.add_semesterreg %}
+          <li class="{% if request.path == SemesterRegistration %} active {% endif %}">
+            <a href="{% url 'SemesterRegistration' %}">
+              <i class=" fa fa-registered"></i> <span>Semester Registration</span>
+            </a>
+          </li>
+        {% endif %}
+        <li class="{% if request.path == LecturerEvaluation %} active {% endif %}">
+          <a href="{% url 'LecturerEvaluation' %}">
+            <i class=" fa fa-comment"></i> <span>Lecturer Evaluation</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>

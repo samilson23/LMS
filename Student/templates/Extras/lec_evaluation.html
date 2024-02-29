@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  {% include 'scripts/css.html' %}
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<div class="wrapper">
+
+  {% include 'STDComponents/Navbar.html' %}
+  {% include 'STDComponents/Sidebar.html' %}
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Lecturer Evaluation
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'STDDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="">Lecturer Evaluation Form</a></li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="row">
+          <div class="col-xs-8">
+            <div class="box box-outline box-success">
+              <div class="box-header">
+
+              </div>
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <p style="color:red;"><b>Please Select a trait that best represents your instructor.</b></p>
+                    <p style="color:red;"><b>NOTE: All the feedback collected here is completely anonymous.</b></p>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label>Lecturer</label>
+                        <div id="lecturer">
+
+                        </div>
+                        <div class="text-center" id="spinner" style="display:none;color:green;">
+                          <i class="fa fa-spinner fa-spin fa-1x"></i>Fetching....
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label>Unit</label>
+                        <select class="form-control" id="unit" name="unit">
+                          {% for unit in units %}
+                            <option value="{{unit.unit.id}}">{{unit.unit.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Teaching</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.promotes_critical_thinking|as_crispy_field}}
+                      {{form.ties_in_primary_objectives_of_the_course|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Clarity</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.explains_concepts_clearly|as_crispy_field}}
+                      {{form.uses_concrete_examples_of_concepts|as_crispy_field}}
+                      {{form.gives_multiple_examples|as_crispy_field}}
+                      {{form.points_out_practical_applications|as_crispy_field}}
+                      {{form.stresses_important_concepts|as_crispy_field}}
+                      {{form.repeats_difficult_ideas|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Interaction</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.encourages_questions_and_comments|as_crispy_field}}
+                      {{form.answers_questions_clearly|as_crispy_field}}
+                      {{form.available_to_students_after_class|as_crispy_field}}
+                      {{form.asks_questions_of_class|as_crispy_field}}
+                      {{form.facilitates_discussions_during_lecture|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Task Orientation</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.proceeds_at_good_pace_for_topic|as_crispy_field}}
+                      {{form.stays_on_theme_of_lecture|as_crispy_field}}
+                      {{form.states_lecture_objectives|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Organization</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.gives_preliminary_overview_of_lecture|as_crispy_field}}
+                      {{form.signals_transition_to_new_topic|as_crispy_field}}
+                      {{form.explains_how_each_topic_fits_in|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4><u>Presentation Style</u></h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{form.projects_confidence|as_crispy_field}}
+                      {{form.speaks_expressively_or_emphatically|as_crispy_field}}
+                      {{form.moves_about_while_lecturing|as_crispy_field}}
+                      {{form.gestures_while_speaking|as_crispy_field}}
+                      {{form.shows_facial_expression|as_crispy_field}}
+                      {{form.uses_humor|as_crispy_field}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <button type="button" id="submit" class="btn btn-success btn-sm">Submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+$(document).ready(function(){
+    fetch_lec()
+    toastr.options = { "closeButton": false, "debug": false, "newestOnTop": true,
+                "progressBar": false, "positionClass": "toast-top-center", "preventDuplicates": true,
+                "onclick": null, "showDuration": "300", "hideDuration": "1000", "timeOut": "5000",
+                "extendedTimeOut": "1000", "showEasing": "swing", "hideEasing": "linear",
+                "showMethod": "fadeIn", "hideMethod": "fadeOut" };
+    $("#unit").on("change", function(){
+      fetch_lec()
+    });
+    function fetch_lec(){
+        var unit = $("#unit").val();
+        $.ajax({
+            url: '{% url 'FetchInstructor' %}',
+            type: 'POST',
+            data: {unit:unit},
+            beforeSend: function(){
+                $("#spinner").show();
+            },
+            success: function(response){
+                var Json_Data = JSON.parse(response)
+                for (key in Json_Data){
+                    var div_data="<input type='text' value='"+Json_Data[key]['full_name']+"' class='form-control' disabled required /><input type='hidden' id='lec' name='lec' value='"+Json_Data[key]['id']+"' class='form-control' />";
+                }
+                if (Json_Data == ""){
+                    var div_data="<input type='text' value='' class='form-control' disabled required /> <input type='hidden' id='lec' name='lec' value='' class='form-control' disabled required />";
+                }
+                $("#lecturer").html(div_data);
+            },
+            error: function(){
+                var div_data="<input type='text' value='' class='form-control' disabled required /> <input type='hidden' id='lec' name='lec' value='' class='form-control' disabled required />";
+                $("#lecturer").html(div_data);
+            },
+            complete: function(){
+                $("#spinner").hide();
+            }
+        })
+    }
+})
+</script>
+
+<script>
+$(document).ready(function(){
+  $(document).on("click","#submit",function(){
+      var lec=$("#lec").val();
+      var unit = $("#unit").val();
+      var a = $("input[type='radio'][name='promotes_critical_thinking']:checked").val();
+      var b = $("input[type='radio'][name='ties_in_primary_objectives_of_the_course']:checked").val();
+      var c = $("input[type='radio'][name='explains_concepts_clearly']:checked").val();
+      var d = $("input[type='radio'][name='uses_concrete_examples_of_concepts']:checked").val();
+      var e = $("input[type='radio'][name='gives_multiple_examples']:checked").val();
+      var f = $("input[type='radio'][name='points_out_practical_applications']:checked").val();
+      var g = $("input[type='radio'][name='stresses_important_concepts']:checked").val();
+      var h = $("input[type='radio'][name='repeats_difficult_ideas']:checked").val();
+      var i = $("input[type='radio'][name='encourages_questions_and_comments']:checked").val();
+      var j = $("input[type='radio'][name='answers_questions_clearly']:checked").val();
+      var k = $("input[type='radio'][name='available_to_students_after_class']:checked").val();
+      var l = $("input[type='radio'][name='facilitates_discussions_during_lecture']:checked").val();
+      var m = $("input[type='radio'][name='asks_questions_of_class']:checked").val();
+      var n = $("input[type='radio'][name='proceeds_at_good_pace_for_topic']:checked").val();
+      var o = $("input[type='radio'][name='stays_on_theme_of_lecture']:checked").val();
+      var p = $("input[type='radio'][name='states_lecture_objectives']:checked").val();
+      var q = $("input[type='radio'][name='gives_preliminary_overview_of_lecture']:checked").val();
+      var r = $("input[type='radio'][name='signals_transition_to_new_topic']:checked").val();
+      var s = $("input[type='radio'][name='explains_how_each_topic_fits_in']:checked").val();
+      var t = $("input[type='radio'][name='projects_confidence']:checked").val();
+      var u = $("input[type='radio'][name='speaks_expressively_or_emphatically']:checked").val();
+      var v = $("input[type='radio'][name='moves_about_while_lecturing']:checked").val();
+      var w = $("input[type='radio'][name='gestures_while_speaking']:checked").val();
+      var x = $("input[type='radio'][name='shows_facial_expression']:checked").val();
+      var y = $("input[type='radio'][name='uses_humor']:checked").val();
+      $.ajax({
+        url: '{% url 'SubmitEvaluation' %}',
+        type: 'POST',
+        data: {lec:lec, unit:unit, a:a, b:b, c:c, d:d, e:e, f:f, g:g, h:h, i:i, l:l, j:j, k:k, m:m, n:n, o:o, p:p, q:q, r:r, s:s, t:t, u:u, v:v, w:w, x:x, y:y},
+        success: function(response){
+            if(response=="Evaluated"){
+              Swal.fire(
+                 '',
+                 'Submitted',
+                 'success',
+              ).then(() => {
+                location.reload()
+              })
+            }
+
+            if(response=="Null"){
+              Swal.fire(
+                 '',
+                 'No Instructor assigned',
+                 'error',
+              ).then(() => {
+                location.reload()
+              })
+            }
+        }
+      })
+  })
+})
+</script>
