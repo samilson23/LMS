@@ -31,6 +31,7 @@ urlpatterns = [
     path('HOD/', include('Head_of_department.urls')),
     path('Faculty/', include('Faculty.urls')),
     path('Lecturer/', include('Lecturer.urls')),
+    path('Finance/', include('Finance.urls')),
     path('Student/', include('Student.urls')),
     path('ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(ckeditor_views.browse)), name='ckeditor_browse'),

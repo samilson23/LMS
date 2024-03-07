@@ -34,7 +34,6 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1 class="text-center">
-        User Groups
       </h1>
       <ol class="breadcrumb">
         <li><a href="{% url 'AdminDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
@@ -46,30 +45,61 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-6">
+<!--        <div class="col-xs-3"></div>-->
+        <div class="col-xs-8">
           <div class="box box-outline box-info">
+            <div class="box-header">
+              <div class="box-title">
+                <h4>Assign User Permissions</h4>
+              </div>
+            </div>
               <div class="box-body">
-                <table id="users" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                      <th></th>
-                      <th>Group Name</th>
-                      <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for object in object_list %}
-                    <tr>
-                      <td class="py-1">{{ forloop.counter }}</td>
-                      <td>{{ object.name }}</td>
-                      <td>
-                        <a href="{% url 'ViewPermissions' object.name %}" class="btn btn-success btn-sm">View Permissions</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label for="selectedGroup">Groups</label>
+                      <select class="form-control" id="selectedGroup">
+                        <option value="">Please Select a Group</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="form-group">
+                      <label>Permissions</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="form-group">
+                      <input type="text" id="search-left" onkeyup="filterOptions('left')" placeholder="search..."  class="form-control"/><br/>
+                      <select class="form-control" id="left-panel" multiple="multiple" size="10"></select>
+                    </div>
+                  </div>
+                  <div class="col-xs-2"><br/><br/>
+                    <div class="duallist-buttons">
+                      `<button id="btnright" type="button" class="btn btn-block">&gt;</button>
+                      <button id="btnleft" type="button" class="btn btn-block">&lt;</button>
+                      <button id="btnrightall" type="button" class="btn btn-block">&gt;&gt;</button>
+                      <button id="btnleftall" type="button" class="btn btn-block">&lt;&lt;</button>
+                    </div>`
+                  </div>
+                  <div class="col-xs-5">
+                    <div class="form-group">
+                      <input type="text" id="search-right" onkeyup="filterOptions('right')" placeholder="search..."  class="form-control"/><br/>
+                      <select class="form-control" id="right-panel" multiple="multiple" size="10"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <button type="button" id="btnSave" class="btn btn-success btn-block">Save</button>
+                  </div>
+                </div>
               </div>
           </div>
         </div>
@@ -77,201 +107,131 @@
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-user bg-yellow"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
-                <p>New phone +1(800)555-1234</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-                <p>nora@example.com</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
-                <p>Execution time 5 seconds</p>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="label label-danger pull-right">70%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Update Resume
-                <span class="label label-success pull-right">95%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Laravel Integration
-                <span class="label label-warning pull-right">50%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Back End Framework
-                <span class="label label-primary pull-right">68%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-      </div>
-      <!-- /.tab-pane -->
-      <!-- Stats tab content -->
-      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-      <!-- /.tab-pane -->
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Allow mail redirect
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Other sets of options are available
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Expose author name in posts
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Allow the user to show his name in blog posts
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <h3 class="control-sidebar-heading">Chat Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Show me as online
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Turn off notifications
-              <input type="checkbox" class="pull-right">
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Delete chat history
-              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-            </label>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
 </body>
 </html>
+<script>
+  fetch('/Admin/UserPermissions/').then(response => response.json())
+  .then(data => {
+    const groups = document.getElementById('selectedGroup');
+    data.forEach(group => {
+      const option = document.createElement('option');
+      option.value = group.name;
+      option.textContent = group.name;
+      groups.appendChild(option)
+    })
+
+    document.getElementById('selectedGroup').addEventListener('change', function () {
+      const selectedGroup = this.value;
+      const selectedPermissions = data.find(group => group.name === selectedGroup).permissions;
+      const selectedPermissionsList = document.getElementById('right-panel');
+      const availablePermissionsList = document.getElementById('left-panel');
+
+      selectedPermissionsList.innerHTML = '';
+      availablePermissionsList.innerHTML = '';
+
+      selectedPermissions.forEach(permission => {
+        const option = document.createElement('option');
+        option.value = permission;
+        option.textContent = permission;
+        selectedPermissionsList.appendChild(option);
+      });
+      fetch('/Admin/FetchPermissions/').then(response => response.json())
+      .then(data => {
+          const all_permissions = data.all_permissions
+          all_permissions.forEach(permission => {
+          if (!selectedPermissions.includes(permission)){
+              const option = document.createElement('option');
+              option.value = permission;
+              option.textContent = permission;
+              availablePermissionsList.appendChild(option);
+          }
+        });
+      })
+    });
+  })
+</script>
+<script>
+  function filterOptions(panel) {
+    let input = document.getElementById("search-" +panel);
+    let select = document.getElementById(panel+ "-panel");
+
+    let filter = input.value.toUpperCase();
+
+    for (let i=0; i < select.options.length; i++){
+      let option = select.options[i];
+      let text = option.text.toUpperCase();
+
+      if (text.indexOf(filter) > -1){
+        option.style.display = "";
+      }else{
+        option.style.display = "none";
+      }
+    }
+  }
+  $(document).ready(function() {
+    $('#btnright').click(function (e) {
+      let selectedoptions = $('#left-panel option:selected');
+      if (selectedoptions.length === 0) {
+        alert('Nothing to move');
+        e.preventDefault();
+      }
+      $('#right-panel').append($(selectedoptions).clone());
+      $(selectedoptions).remove();
+      e.preventDefault()
+    });
+    $('#btnleft').click(function (e) {
+      let selectedoptions = $('#right-panel option:selected');
+      if (selectedoptions.length === 0) {
+        alert('Nothing to move');
+        e.preventDefault();
+      }
+      $('#left-panel').append($(selectedoptions).clone());
+      $(selectedoptions).remove();
+      e.preventDefault();
+    });
+    $('#btnrightall').click(function (e) {
+      let alloptions = $('#left-panel option');
+      if (alloptions.length === 0) {
+        alert("Nothing to move");
+        e.preventDefault();
+      }
+      $('#right-panel').append($(alloptions).clone());
+      $(alloptions).remove();
+      e.preventDefault();
+    });
+    $('#btnleftall').click(function (e) {
+      let alloptions = $('#right-panel option');
+      if (alloptions.length === 0) {
+        alert("Nothing to move");
+        e.preventDefault();
+      }
+      $('#left-panel').append($(alloptions).clone());
+      $(alloptions).remove();
+      e.preventDefault();
+    });
+    function save_to_db(e){
+      let groupSelect = document.getElementById('selectedGroup')
+      let SelectedGroup = groupSelect.value;
+      let SelectedPerms = Array.from(document.getElementById('right-panel').options).map(option => option.value);
+      let RemovedPerms = Array.from(document.getElementById('left-panel').options).map(option => option.value);
+      RemovedPerms = JSON.stringify(RemovedPerms)
+      SelectedPerms = JSON.stringify(SelectedPerms)
+      $.ajax({
+        url: '{% url "UpdatePermissions" %}',
+        type: 'POST',
+        data: {SelectedPerms: SelectedPerms, RemovedPerms:RemovedPerms, SelectedGroup:SelectedGroup},
+        success: function (response) {
+          alert("Permissions Updated")
+          e.preventDefault()
+        },
+        error: function () {
+          alert('Failed')
+        }
+      });
+    }
+
+    document.getElementById('btnSave').addEventListener("click", save_to_db)
+  });
+</script>

@@ -8,13 +8,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group, Permission
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
-from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
 from django.views import View, generic
 from django.views.decorators.csrf import csrf_exempt
@@ -111,8 +109,13 @@ class UpdateProfile(LoginRequiredMixin, View):
 
 
 class UserManagement(LoginRequiredMixin, ListView):
-    model = User
     template_name = 'AdminUserManagement/usermanagement.html'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        elif self.request.user.usertype == 'ADMIN':
+            return User.objects.filter(usertype__in=['STUDENT', 'DEAN', 'HOD', 'LECTURER', 'FINANCE'])
 
 
 class CreateUser(LoginRequiredMixin, TemplateView):
@@ -745,8 +748,55 @@ class UpdateNotice(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().form_valid(form)
 
 
-class Groups(LoginRequiredMixin, ListView):
-    model = Group
+
+@method_decorator(csrf_exempt, name='dispatch')
+class FetchPermissions(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request):
+        all_permissions = list(Permission.objects.values_list('name', flat=True))
+        return JsonResponse({'all_permissions': all_permissions})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UserPermissions(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request):
+        groups = Group.objects.all()
+        group_data = []
+        for group in groups:
+            permissions = group.permissions.all()
+            permission_list = [permission.name for permission in permissions]
+            all_permissions = list(Permission.objects.values_list('name', flat=True))
+            group_data.append({'name': group.name, 'permissions': permission_list, 'all_permissions': all_permissions})
+        return JsonResponse(group_data, safe=False)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdatePermissions(LoginRequiredMixin, View):
+    @staticmethod
+    def post(request):
+        group_name = request.POST.get('SelectedGroup')
+        SelectedPerms = request.POST.get('SelectedPerms')
+        RemovedPerms = request.POST.get('RemovedPerms')
+        json_data = json.loads(RemovedPerms)
+        json_data1 = json.loads(SelectedPerms)
+        group = Group.objects.get(name=group_name)
+        if group_name != '':
+            for selected_perms in json_data1:
+                selected_permission = Permission.objects.filter(name=selected_perms)
+                for selected_permission in selected_permission:
+                    group.permissions.add(selected_permission)
+            for removed_perms in json_data:
+                removed_permission = Permission.objects.filter(name=removed_perms)
+                for removed_permission in removed_permission:
+                    group.permissions.remove(removed_permission)
+            return HttpResponse('success')
+        else:
+            return HttpResponse('Failed')
+
+
+
+class UserGroupsAndPermissions(LoginRequiredMixin, TemplateView):
     template_name = 'AdminUserManagement/groups.html'
 
 
@@ -821,7 +871,9 @@ class OpenSemesterRegistration(LoginRequiredMixin, View):
             if no_of_days != '':
                 extend = timezone.now() + timedelta(days=int(no_of_days))
                 deadlines.sem_reg_deadline = extend
-                deadlines.save()
+            else:
+                deadlines.sem_reg_deadline = deadline
+            deadlines.save()
             for dept in json_data:
                 departments = Department.objects.get(hashid=dept)
                 deadlines.departments.add(departments)

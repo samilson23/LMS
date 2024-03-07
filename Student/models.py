@@ -115,3 +115,38 @@ class ProvisionalTranscripts(models.Model):
     class Meta:
         verbose_name_plural = 'Transcripts'
 
+
+class FeeStatement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    doc_no = models.CharField(max_length=100, blank=False)
+    description = models.CharField(max_length=100, blank=False)
+    debit = models.FloatField(default=0.0)
+    credit = models.FloatField(default=0.0)
+    balance = models.FloatField(default=0.0)
+    timestamp = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.doc_no
+
+
+class FeeStructure(models.Model):
+    stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
+    tuition = models.FloatField(default=0.0, blank=False)
+    student_activity = models.FloatField(default=0.0, blank=False)
+    student_id_card = models.FloatField(default=0.0, blank=False)
+    computer_fee = models.FloatField(default=0.0, blank=False)
+    examination_fee = models.FloatField(default=0.0, blank=False)
+    internet_connectivity = models.FloatField(default=0.0, blank=False)
+    kuccps_placement_fee = models.FloatField(default=0.0, blank=False)
+    library_fee = models.FloatField(default=0.0, blank=False)
+    maintenance_fee = models.FloatField(default=0.0, blank=False)
+    medical_fee = models.FloatField(default=0.0, blank=False)
+    student_organization = models.FloatField(default=0.0, blank=False)
+    quality_assurance_fee = models.FloatField(default=0.0, blank=False)
+    registration_fee = models.FloatField(default=0.0, blank=False)
+    amenity_fee = models.FloatField(default=0.0, blank=False)
+    attachment = models.FloatField(default=0.0, blank=False)
+    total = models.FloatField(default=0.0, blank=False)
+
+    def __float__(self):
+        return self.tuition

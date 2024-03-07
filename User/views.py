@@ -28,7 +28,7 @@ class MyLoginView(LoginView):
     def form_valid(self, form):
         super().form_valid(form)
         if self.request.user.is_authenticated:
-            if self.request.user.usertype == 'ADMIN':
+            if self.request.user.usertype == 'ADMIN' or self.request.user.is_superuser:
                 if self.request.user.has_profile:
                     messages.success(self.request, f"Welcome back {self.request.user.first_name}  {self.request.user.last_name}")
                     return redirect('AdminDashboard')
@@ -79,6 +79,13 @@ class MyLoginView(LoginView):
                     else:
                         messages.info(self.request, "Please Create your profile first")
                         return redirect('STDCreateProfile')
+            elif self.request.user.usertype == 'FINANCE':
+                if self.request.user.has_profile:
+                    messages.success(self.request, f"Welcome back {self.request.user.first_name}  {self.request.user.last_name}")
+                    return redirect('FinanceDashboard')
+                else:
+                    messages.info(self.request, "Please Create your profile first")
+                    return redirect('FinanceCreateProfile')
             else:
                 messages.add_message(self.request, messages.ERROR, 'Role not assigned')
                 return redirect('logout')

@@ -28,7 +28,7 @@
   <div class="register-box-body">
     <p class="login-box-msg">Create Account</p>
 
-    <form action="{% url 'SignUp' %}" method="post">
+    <form action="" method="post">
       {% csrf_token %}
       <div class="form-group has-feedback">
         {{form|crispy}}

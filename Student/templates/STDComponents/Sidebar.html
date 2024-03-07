@@ -11,6 +11,9 @@
 {% url 'Checkout' as Checkout %}
 {% url 'InterSchoolTransfer' as InterSchoolTransfer %}
 {% url 'SupplementaryExamRegistration' as SupplementaryExamRegistration %}
+{% url 'FeeStructure' as FeeStructure %}
+{% url 'FeeStatement' as FeeStatement %}
+{% url 'PaymentReceipts' as PaymentReceipts %}
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -32,18 +35,18 @@
             <i class="fa fa-dashboard"></i><span> Dashboard</span>
           </a>
         </li>
-        <li class="treeview {% if request.path == FeePayment %} menu-open {% endif %}{% if request.path == Checkout %} menu-open {% endif %}">
+        <li class="treeview {% if request.path == FeeStatement %} menu-open {% endif %}{% if request.path == PaymentReceipts %} menu-open {% endif %}{% if request.path == FeePayment %} menu-open {% endif %}{% if request.path == Checkout %} menu-open {% endif %}{% if request.path == FeeStructure %} menu-open {% endif %}">
           <a href="#">
             <i class="fa fa-bank"></i> <span>Financials</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu" style="display: {% if request.path == FeePayment %} block; {% endif %}{% if request.path == Checkout %} block; {% endif %}">
+          <ul class="treeview-menu" style="display: {% if request.path == FeePayment %} block; {% endif %}{% if request.path == PaymentReceipts %} block; {% endif %}{% if request.path == FeeStatement %} block; {% endif %}{% if request.path == FeeStructure %} block; {% endif %}{% if request.path == Checkout %} block; {% endif %}">
             <li class="{% if request.path == Checkout %} active {% endif %}{% if request.path == FeePayment %} active {% endif %}"><a href="{% url 'FeePayment' %}"><i class="fa fa-circle-o"></i> Fee Payment</a></li>
-            <li class=""><a href=""><i class="fa fa-circle-o"></i> Fee Structure</a></li>
-            <li class=""><a href=""><i class="fa fa-circle-o"></i> Payment Receipts</a></li>
-            <li class=""><a href=""><i class="fa fa-circle-o"></i> Fee Statement</a></li>
+            <li class="{% if request.path == FeeStructure %} active {% endif %}"><a href="{% url 'FeeStructure' %}"><i class="fa fa-circle-o"></i> Fee Structure</a></li>
+            <li class="{% if request.path == PaymentReceipts %} active {% endif %}"><a href="{% url 'PaymentReceipts' %}"><i class="fa fa-circle-o"></i> Payment Receipts</a></li>
+            <li class="{% if request.path == FeeStatement %} active {% endif %}"><a href="{% url 'FeeStatement' %}"><i class="fa fa-circle-o"></i> Fee Statement</a></li>
           </ul>
         </li>
         <li class="treeview {% if request.path == UnitRegistration %} menu-open {% endif %} {% if request.path == ProvisionalTranscript %} menu-open {% endif %} {% if request.path == ExamCard %} menu-open {% endif %}">

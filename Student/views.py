@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Sum
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -230,52 +231,61 @@ class SemesterRegistration(LoginRequiredMixin, ListView):
 class SubmitSemReg(LoginRequiredMixin, View):
     @staticmethod
     def post(request):
-        user_id = User.objects.get(id=request.user.id)
-        stage = request.POST.get('stage')
-        stage_id = Stage.objects.get(id=stage)
-        sem = str(stage_id.stage)
-        student = Students.objects.get(user=user_id)
-        now = timezone.now()
-        end_date = now + timedelta(days=120)
-        parts = sem.split()
-        card_number = randint(10000, 999999)
-        for i in range(len(parts) - 1):
-            if parts[i] == "Year" and parts[i + 1].isdigit():
-                year = f"{parts[i]} {parts[i + 1]}"
         try:
-            Year.objects.get(student=user_id, year=year)
-            pass
-        except Year.DoesNotExist:
-            current_yr = Year.objects.filter(student=user_id, current=True)
-            for current_yr in current_yr:
-                current_yr.current = False
-                current_yr.save()
-            faculty_id = Faculty.objects.get(id=student.faculty.id)
-            Year.objects.create(student=user_id, year=year, faculty=faculty_id)
-        try:
-            reg = SemesterReg.objects.get(student=user_id, current=True)
-            reg.current = False
-            reg.save()
+            stage = request.POST.get('stage')
+            stage_id = Stage.objects.get(id=stage)
+            fee_structure = FeeStructure.objects.get(stage__id=stage_id.id)
+            total_sum = float(fee_structure.total)
+            print(total_sum)
+            user_id = User.objects.get(id=request.user.id)
+            sem = str(stage_id.stage)
+            student = Students.objects.get(user=user_id)
+            student.total_billed += total_sum
+            student.fee_balance += total_sum
+            student.save()
+            now = timezone.now()
+            end_date = now + timedelta(days=120)
+            parts = sem.split()
+            card_number = randint(10000, 999999)
+            for i in range(len(parts) - 1):
+                if parts[i] == "Year" and parts[i + 1].isdigit():
+                    year = f"{parts[i]} {parts[i + 1]}"
             try:
-                unit_reg = UnitRegistration.objects.get(active=True, student=user_id)
-                unit_reg.active = False
-                unit_reg.save()
-                reg_report = RegistrationReport.objects.filter(registration_id=unit_reg, status=True)
-                for units in reg_report:
-                    units.status = False
-                    units.save()
-                resit_reg_report = RegistrationReport.objects.filter(student=request.user.id, resit=True)
-                for units in resit_reg_report:
-                    units.resit = False
-                    units.save()
-            except UnitRegistration.DoesNotExist:
+                Year.objects.get(student=user_id, year=year)
                 pass
-            SemesterReg.objects.get_or_create(student=user_id, stage=stage_id, card_number=card_number, current=True,
-                                              end_date=end_date)
-            messages.success(request, f'You have successfully registered for {stage_id.stage}')
-        except SemesterReg.DoesNotExist:
-            SemesterReg.objects.get_or_create(student=user_id, stage=stage_id, card_number=card_number, current=True, end_date=end_date)
-            messages.success(request, f'You have successfully registered for {stage_id.stage}')
+            except Year.DoesNotExist:
+                current_yr = Year.objects.filter(student=user_id, current=True)
+                for current_yr in current_yr:
+                    current_yr.current = False
+                    current_yr.save()
+                faculty_id = Faculty.objects.get(id=student.faculty.id)
+                Year.objects.create(student=user_id, year=year, faculty=faculty_id)
+            try:
+                reg = SemesterReg.objects.get(student=user_id, current=True)
+                reg.current = False
+                reg.save()
+                try:
+                    unit_reg = UnitRegistration.objects.get(active=True, student=user_id)
+                    unit_reg.active = False
+                    unit_reg.save()
+                    reg_report = RegistrationReport.objects.filter(registration_id=unit_reg, status=True)
+                    for units in reg_report:
+                        units.status = False
+                        units.save()
+                    resit_reg_report = RegistrationReport.objects.filter(student=request.user.id, resit=True)
+                    for units in resit_reg_report:
+                        units.resit = False
+                        units.save()
+                except UnitRegistration.DoesNotExist:
+                    pass
+                SemesterReg.objects.get_or_create(student=user_id, stage=stage_id, card_number=card_number, current=True,
+                                                  end_date=end_date)
+                messages.success(request, f'You have successfully registered for {stage_id.stage}')
+            except SemesterReg.DoesNotExist:
+                SemesterReg.objects.get_or_create(student=user_id, stage=stage_id, card_number=card_number, current=True, end_date=end_date)
+                messages.success(request, f'You have successfully registered for {stage_id.stage}')
+        except FeeStructure.DoesNotExist:
+            messages.error(request, 'FeeStructure for this semester does not exist')
         return redirect('STDDashboard')
 
 
@@ -564,7 +574,7 @@ class FetchFailedUnits(LoginRequiredMixin, View):
         year_id = request.POST.get("year")
         if stage_id != "" and year_id != "":
             user_id = User.objects.get(id=request.user.id)
-            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id)
+            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id, hod_approved=True, admin_approved=True)
             list_data = []
             for Units in unit:
                 report = RegistrationReport.objects.filter(unit=Units.unit.id, supplementary=False, student=user_id)
@@ -657,7 +667,7 @@ class FetchPendingUnits(LoginRequiredMixin, View):
         year_id = request.POST.get("year")
         if stage_id != "" and year_id != "":
             user_id = User.objects.get(id=request.user.id)
-            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id)
+            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id, hod_approved=True, admin_approved=True)
             list_data = []
             for Units in unit:
                 report = RegistrationReport.objects.filter(unit=Units.unit.id, supplementary=False, student=user_id)
@@ -1028,3 +1038,106 @@ class CompleteTransaction(LoginRequiredMixin, View):
         if request.method == 'POST':
             print(request.body)
             print('POST')
+
+
+def get_fee_structure(request, department):
+    timestamp = timezone.now().strftime("%A, %d, %B, %Y")
+    fee_structure = FeeStructure.objects.filter(stage__department__hashid=department)
+    total = FeeStructure.objects.values_list('stage__year', 'stage__department__name').distinct()
+    total_tuition = 0
+    total_student_activity = 0
+    total_student_organization = 0
+    total_student_id_card = 0
+    total_computer_fee = 0
+    total_examination_fee = 0
+    kuccps_placement_fee = 0
+    internet_connectivity = 0
+    library_fee = 0
+    maintenance_fee = 0
+    medical_fee = 0
+    registration_fee = 0
+    quality_assurance_fee = 0
+    amenity_fee = 0
+    attachment = 0
+    sub_total = 0
+    for year, department in total:
+        sum_total = FeeStructure.objects.filter(stage__year=year, stage__department__name=department)
+        total_tuition = sum_total.aggregate(total_tuition=Sum('tuition'))['total_tuition']
+        total_student_activity = sum_total.aggregate(total_student_activity=Sum('student_activity'))['total_student_activity']
+        total_student_organization = sum_total.aggregate(total_student_organization=Sum('student_organization'))['total_student_organization']
+        total_student_id_card = sum_total.aggregate(total_student_id_card=Sum('student_id_card'))['total_student_id_card']
+        total_computer_fee = sum_total.aggregate(total_computer_fee=Sum('computer_fee'))['total_computer_fee']
+        total_examination_fee = sum_total.aggregate(total_examination_fee=Sum('examination_fee'))['total_examination_fee']
+        internet_connectivity = sum_total.aggregate(internet_connectivity=Sum('internet_connectivity'))['internet_connectivity']
+        kuccps_placement_fee = sum_total.aggregate(kuccps_placement_fee=Sum('kuccps_placement_fee'))['kuccps_placement_fee']
+        library_fee = sum_total.aggregate(library_fee=Sum('library_fee'))['library_fee']
+        maintenance_fee = sum_total.aggregate(maintenance_fee=Sum('maintenance_fee'))['maintenance_fee']
+        medical_fee = sum_total.aggregate(medical_fee=Sum('medical_fee'))['medical_fee']
+        quality_assurance_fee = sum_total.aggregate(quality_assurance_fee=Sum('quality_assurance_fee'))['quality_assurance_fee']
+        registration_fee = sum_total.aggregate(registration_fee=Sum('registration_fee'))['registration_fee']
+        amenity_fee = sum_total.aggregate(amenity_fee=Sum('amenity_fee'))['amenity_fee']
+        attachment = sum_total.aggregate(attachment=Sum('attachment'))['attachment']
+        sub_total = sum_total.aggregate(total=Sum('total'))['total']
+    if fee_structure.exists():
+        context = {
+            'queryset': fee_structure,
+            'user': User.objects.get(id=request.user.id),
+            'student': Students.objects.get(user=request.user.id),
+            'timestamp': timestamp,
+            'total_tuition': total_tuition,
+            'total_student_activity': total_student_activity,
+            'total_student_organization': total_student_organization,
+            'total_student_id_card': total_student_id_card,
+            'total_computer_fee': total_computer_fee,
+            'total_examination_fee': total_examination_fee,
+            'internet_connectivity': internet_connectivity,
+            'kuccps_placement_fee': kuccps_placement_fee,
+            'library_fee': library_fee,
+            'maintenance_fee': maintenance_fee,
+            'medical_fee': medical_fee,
+            'quality_assurance_fee': quality_assurance_fee,
+            'registration_fee': registration_fee,
+            'amenity_fee': amenity_fee,
+            'attachment': attachment,
+            'sub_total': sub_total,
+        }
+        pdf = render_to_pdf('pdf/FeeStructure.html', context)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        name = str(request.user.username)
+        username = name.replace('/', '')
+        filename = 'FeeStructure-%s.pdf' % username
+        content = 'filename=%s' % filename
+        response['Content-Disposition'] = content
+        return response
+    else:
+        return HttpResponse('File not found, contact system administrator', status=404)
+
+
+class FeeStructures(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request):
+        std = Students.objects.get(user=request.user)
+        department = Department.objects.get(hashid=std.course.department.hashid)
+        get_fee_structure(request, department)
+
+        context = {
+            'department': department
+        }
+        return render(request, 'Financials/FeeStructure.html', context)
+
+
+
+class FeeStatement(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request):
+        return render(request, 'Financials/FeeStatement.html')
+
+
+class PaymentReceipts(LoginRequiredMixin, ListView):
+    template_name = 'Financials/PaymentReceipts.html'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(paid_by=self.request.user, status='COMPLETED')
+
+
+

@@ -44,4 +44,8 @@ urlpatterns = [
     path('SubmitPayment/', SubmitPayment.as_view(), name='SubmitPayment'),
     path('Checkout/', Checkout.as_view(), name='Checkout'),
     path('CompleteTransaction/', CompleteTransaction.as_view(), name='CompleteTransaction'),
+    path('FeeStructure/', FeeStructures.as_view(), name='FeeStructure'),
+    path('FeeStatement/', FeeStatement.as_view(), name='FeeStatement'),
+    path('PaymentReceipts/', PaymentReceipts.as_view(), name='PaymentReceipts'),
+    path('get_fee_structure/<department>/', get_fee_structure, name='get_fee_structure'),
 ]

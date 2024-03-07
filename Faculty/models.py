@@ -54,6 +54,7 @@ class Course(models.Model):
 class Stage(models.Model):
     hashid = HashidsField(real_field_name='id', min_length=5)
     stage = models.CharField(max_length=100, blank=False)
+    year = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     date_added = models.DateField(auto_now_add=True)

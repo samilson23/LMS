@@ -6,3 +6,4 @@ from Student.models import *
 admin.site.register(Students)
 admin.site.register(ExamCards)
 admin.site.register(ProvisionalTranscripts)
+admin.site.register(FeeStructure)

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="csrf-token" content="{{csrf_token}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% include 'messages/messages.html' %}
+  {% include 'scripts/css.html' %}
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+<div class="wrapper">
+
+  {% include 'STDComponents/Navbar.html' %}
+  {% include 'STDComponents/Sidebar.html' %}
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="{% url 'STDDashboard' %}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="">FeePayment</a></li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="row">
+          <div class="col-xs-8">
+            <div class="box box-outline box-sucess">
+                <div class="box-header"><div class="box-title"><h4>Payment Receipts</h4></div></div>
+                <div class="box-body">
+                    <table id="users" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Ref</th>
+                          <th>Payment Method</th>
+                          <th>Paid By</th>
+                          <th>Amount</th>
+                          <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                          <td>{{object.timestamp}}</td>
+                          <td>{{object.reference}}</td>
+                          <td>{{object.payment_method}}</td>
+                          <td>{{object.paid_by.first_name}}</td>
+                          <td>{{object.amount}}</td>
+                          <td>
+                              <div class="row">
+                                  <div class="col-xs-4">
+                                      <a href="" class="btn btn-info btn-sm text-sm"><i class="fa fa-print"></i>Print</a>
+                                  </div>
+                              </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

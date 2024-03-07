@@ -1,0 +1,50 @@
+{% load static %}
+{% url 'FinanceDashboard' as FinanceDashboard %}
+{% url 'FinanceListDepartments' as FinanceListDepartments %}
+{% url 'ListFeeStructures' as ListFeeStructures %}
+{% url 'CreateFeeStructure' department=dept.hashid as CreateFeeStructure %}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="{% static 'img/logo.png' %}" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>{{request.user.first_name}} {{request.user.last_name}}</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN NAVIGATION</li>
+        <li class="{% if request.path == FinanceDashboard %} active {% endif %}">
+          <a href="{% url 'FinanceDashboard' %}">
+            <i class="fa fa-dashboard"></i><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="{% if request.path == CreateFeeStructure %} active {% endif %}{% if request.path == FinanceListDepartments %} active {% endif %}">
+            <a href="{% url 'FinanceListDepartments' %}">
+              <i class=" fa fa-building"></i>Departments
+            </a>
+        </li>
+        <li class="{% if request.path == ListFeeStructures %} active {% endif %}">
+            <a href="{% url 'ListFeeStructures' %}">
+                <i class=" fa fa-calendar-times-o"></i><span>Fee Structures</span>
+            </a>
+        </li>
+        <li class="">
+            <a href="">
+                <i class=" fa fa-calendar-times-o"></i><span>Students</span>
+            </a>
+        </li>
+        <li class="">
+            <a href="">
+                <i class=" fa fa-calendar-times-o"></i><span>Transactions</span>
+            </a>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>

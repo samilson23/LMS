@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-from Faculty.models import Course, Department, Faculty, Unit, Results
+from Faculty.models import Course, Department, Faculty, Unit, Results, Stage
 
 
 @receiver(pre_save, sender=Course)
@@ -30,3 +30,12 @@ def grade_point(sender, instance, **kwargs):
         instance.grade_points = 1
     elif instance.grade == 'E' or instance.grade == 'X':
         instance.grade_points = 0
+
+
+@receiver(pre_save, sender=Stage)
+def create_year(sender, instance, **kwargs):
+    parts = instance.stage.split()
+    for i in range(len(parts) - 1):
+        if parts[i] == "Year" and parts[i + 1].isdigit():
+            year = f"{parts[i]} {parts[i + 1]}"
+            instance.year = year

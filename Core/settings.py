@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'datatableview',
-    'Pesapal'
+    'Pesapal',
+    'Finance'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
