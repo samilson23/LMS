@@ -177,3 +177,5 @@ CKEDITOR_CONFIGS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFileStorage'

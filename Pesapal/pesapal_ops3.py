@@ -10,7 +10,7 @@ pesapal_processor3.testing = False
 def post_transaction(Reference, FirstName, LastName, Email, PhoneNumber, Description, Amount, Type):
     
     post_params = {
-        'oauth_callback': 'https://4330-41-81-217-176.ngrok-free.app/Student/CompleteTransaction'
+        'oauth_callback': 'https://samilsonuniversity1-5c5d6f1676ed.herokuapp.com/Student/CompleteTransaction'
     }
 
     request_data = {
