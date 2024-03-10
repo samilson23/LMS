@@ -1206,31 +1206,36 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'reference': Reference,  # some object id
                 'email': Email,
             }
-            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, merchant_reference=Reference,
-                                       payment_status=0)
+            STDTransaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
+                                       payment_status='PENDING')
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
-    def get(self, request, *args, **kwargs):
+class CompleteTransaction(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request, *args, **kwargs):
         params = request.GET
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
-        param = {
-            "pesapal_merchant_reference": merchant_reference,
-            "pesapal_transaction_tracking_id": transaction_tracking_id,
-        }
-        trans = Transaction.objects.get(merchant_reference=merchant_reference)
+        print(merchant_reference)
+        print(transaction_tracking_id)
+        status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
+        print(status)
+        p_status = str(status).split('=')[1]
+        trans = Transaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
-        description = f'{trans.created} Fee Collection {merchant_reference}'
+        description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+        trans.description = description
+        trans.status = p_status
+        trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
         student.save()
         FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
                                     balance=student.fee_balance)
-        return HttpResponse("Success")
+        return render(request, 'Financials/status.html', {'status': p_status})
 
 
 def get_fee_structure(request, department):
