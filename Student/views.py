@@ -1203,9 +1203,9 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        print(request.body)
+        print(request.POST)
         params = request.GET
-        for key, value in params.items():
+        for key, value in request.POST.items():
             print(f'{key}: {value}')
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
