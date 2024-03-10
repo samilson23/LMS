@@ -290,19 +290,6 @@ class UpdatePaymentStatusMixin(PaymentRequestMixin):
         response = self.get_payment_status(**params)
 
         if response["payment_status"] == "COMPLETED":
-            trans = STDTransaction.objects.get(reference=self.merchant_reference)
-            user = User.objects.get(id=trans.paid_by.id)
-            description = f'{trans.timestamp} Fee Collection {self.merchant_reference}'
-            trans.description = description
-            trans.status = Transaction.COMPLETED
-            trans.save()
-            student = Students.objects.get(user=user)
-            student.total_paid += float(trans.amount)
-            student.fee_balance -= float(trans.amount)
-            student.save()
-            FeeStatement.objects.create(user=user, doc_no=self.merchant_reference, description=description,
-                                        payment_method=response["payment_method"], credit=trans.amount,
-                                        balance=student.fee_balance)
             self.transaction.payment_status = Transaction.COMPLETED
             self.transaction.payment_method = response["payment_method"]
         elif response["payment_status"] == "FAILED":

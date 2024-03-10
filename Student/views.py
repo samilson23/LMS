@@ -1212,12 +1212,33 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
             return context
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
-    def get(self, request, *args, **kwargs):
-        pesapal_mercharnt = request.GET.get('pesapal_mercharnt_reference')
-        pesapal_transaction_tracking_id = request.GET.get('pesapal_transaction_tracking_id')
-
-        return HttpResponse("pesapal_notification_type=CHANGE&pesapal_request_data=OK")
+class CompleteTransaction(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request, *args, **kwargs):
+        params = request.GET
+        merchant_reference = params['pesapal_merchant_reference']
+        transaction_tracking_id = params['pesapal_transaction_tracking_id']
+        print(merchant_reference)
+        print(transaction_tracking_id)
+        detailed = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
+        payment_method = detailed['payment_method']
+        print(payment_method)
+        status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
+        print(status)
+        p_status = str(status).split('=')[1]
+        trans = STDTransaction.objects.get(reference=merchant_reference)
+        user = User.objects.get(id=trans.paid_by.id)
+        description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+        trans.description = description
+        trans.status = p_status
+        trans.save()
+        student = Students.objects.get(user=user)
+        student.total_paid += float(trans.amount)
+        student.fee_balance -= float(trans.amount)
+        student.save()
+        FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
+                                    balance=student.fee_balance)
+        return render(request, 'Financials/status.html', {'status': p_status})
 
 
 def get_fee_structure(request, department):
@@ -1301,7 +1322,7 @@ class PaymentReceipts(LoginRequiredMixin, ListView):
     template_name = 'Financials/PaymentReceipts.html'
 
     def get_queryset(self):
-        return Transaction.objects.filter(paid_by=self.request.user, status='COMPLETED')
+        return STDTransaction.objects.filter(paid_by=self.request.user, status='COMPLETED')
 
 
 
