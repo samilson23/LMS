@@ -329,7 +329,7 @@ class IPNCallbackView(UpdatePaymentStatusMixin, PaymentResponseMixin, View):
         response = query_dict.urlencode()
         return HttpResponse(response)
 
-    def get(self, request, *args, **kwargs):
+    def get_status(self, request, *args, **kwargs):
         self.process_payment_status()
         response = self.build_ipn_response()
         return response

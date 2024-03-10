@@ -1213,7 +1213,7 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
-    def get(self, request, *args, **kwargs):
+    def get_status(self, request, *args, **kwargs):
         pesapal_mercharnt = request.GET.get('pesapal_mercharnt_reference')
         pesapal_transaction_tracking_id = request.GET.get('pesapal_transaction_tracking_id')
 
