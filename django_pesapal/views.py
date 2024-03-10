@@ -5,7 +5,10 @@ import oauth2 as oauth
 import requests
 
 from django.apps import apps
+from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+
+from Student.models import FeeStatement, Students
 
 try:
     from django.urls import reverse
@@ -15,12 +18,15 @@ except ModuleNotFoundError:
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import get_object_or_404
 from django.utils.safestring import mark_safe
+from Pesapal.models import Transaction as STDTransaction
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.base import View, RedirectView, TemplateView
 
 from xml.etree import cElementTree as ET
 
 from . import conf as settings
+
+User = get_user_model()
 
 
 DEFAULT_TYPE = "MERCHANT"
@@ -284,6 +290,19 @@ class UpdatePaymentStatusMixin(PaymentRequestMixin):
         response = self.get_payment_status(**params)
 
         if response["payment_status"] == "COMPLETED":
+            trans = STDTransaction.objects.get(reference=self.merchant_reference)
+            user = User.objects.get(id=trans.paid_by.id)
+            description = f'{trans.timestamp} Fee Collection {self.merchant_reference}'
+            trans.description = description
+            trans.status = Transaction.COMPLETED
+            trans.save()
+            student = Students.objects.get(user=user)
+            student.total_paid += float(trans.amount)
+            student.fee_balance -= float(trans.amount)
+            student.save()
+            FeeStatement.objects.create(user=user, doc_no=self.merchant_reference, description=description,
+                                        payment_method=response["payment_method"], credit=trans.amount,
+                                        balance=student.fee_balance)
             self.transaction.payment_status = Transaction.COMPLETED
             self.transaction.payment_method = response["payment_method"]
         elif response["payment_status"] == "FAILED":
@@ -329,7 +348,7 @@ class IPNCallbackView(UpdatePaymentStatusMixin, PaymentResponseMixin, View):
         response = query_dict.urlencode()
         return HttpResponse(response)
 
-    def get_status(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         self.process_payment_status()
         response = self.build_ipn_response()
         return response

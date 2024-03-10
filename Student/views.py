@@ -1213,23 +1213,9 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
-    def get_status(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         pesapal_mercharnt = request.GET.get('pesapal_mercharnt_reference')
         pesapal_transaction_tracking_id = request.GET.get('pesapal_transaction_tracking_id')
-
-        transaction = self.transaction
-        trans = Transaction.objects.get(reference=pesapal_mercharnt)
-        user = User.objects.get(id=trans.paid_by.id)
-        description = f'{trans.timestamp} Fee Collection {pesapal_mercharnt}'
-        trans.description = description
-        trans.status = transaction.status
-        trans.save()
-        student = Students.objects.get(user=user)
-        student.total_paid += float(trans.amount)
-        student.fee_balance -= float(trans.amount)
-        student.save()
-        FeeStatement.objects.create(user=user, doc_no=pesapal_mercharnt, description=description, payment_method=transaction.payment_method, credit=trans.amount,
-                                    balance=student.fee_balance)
 
         return HttpResponse("pesapal_notification_type=CHANGE&pesapal_request_data=OK")
 
