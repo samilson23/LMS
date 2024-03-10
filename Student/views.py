@@ -1203,8 +1203,21 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        print(request.body)
-        return HttpResponse('Success')
+        if request.method == 'POST':
+            print(request.body)
+            print('POST')
+        else:
+            params = request.GET
+            print(params)
+        merchant_reference = params['pesapal_merchant_reference']
+        transaction_tracking_id = params['pesapal_transaction_tracking_id']
+        print(merchant_reference)
+        print(transaction_tracking_id)
+        # status = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
+        status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
+        p_status = str(status).split('=')[1]
+
+        return render(request, 'Financials/status.html', {'status': p_status})
 
 def get_fee_structure(request, department):
     timestamp = timezone.now().strftime("%A, %d, %B, %Y")
