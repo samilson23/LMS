@@ -1201,8 +1201,8 @@ class SubmitPayment(LoginRequiredMixin, View):
 
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
-    def post(request):
-        for key, value in request.POST.items():
+    def get(request):
+        for key, value in request.GET.items():
             print(f'{key}: {value}')
 
 def get_fee_structure(request, department):
