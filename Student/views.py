@@ -1207,7 +1207,7 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'email': Email,
             }
             Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, merchant_reference=Reference,
-                                       payment_status='PENDING')
+                                       payment_status=0)
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
@@ -1228,7 +1228,6 @@ class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
         trans = Transaction.objects.get(merchant_reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
-        trans.description = description
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
