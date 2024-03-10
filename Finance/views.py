@@ -11,7 +11,7 @@ from Finance.forms.CreateFeeStructureForm import CreateFeeStructureForm
 from Finance.models import *
 from Finance.forms.CreateProfile import *
 from Faculty.models import *
-from Pesapal.models import Transaction
+from Pesapal.models import STDTransaction
 from Student.models import FeeStructure, Students, FeeStatement
 
 
@@ -205,7 +205,7 @@ class StudentReceipts(LoginRequiredMixin, ListView):
     template_name = 'Finance/Receipts.html'
 
     def get_queryset(self):
-        return Transaction.objects.filter(paid_by__hashid=self.kwargs['student'])
+        return STDTransaction.objects.filter(paid_by__hashid=self.kwargs['student'])
 
 
 class Receipts(LoginRequiredMixin, ListView):

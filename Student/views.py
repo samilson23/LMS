@@ -26,7 +26,7 @@ from reportlab.pdfgen import canvas
 from Faculty.models import *
 from Lecturer.models import *
 from Pesapal import pesapal_ops3
-from Pesapal.models import Transaction
+from Pesapal.models import STDTransaction
 from Student.forms.CreateProfile import STDDetails, CreateSTDProfile
 from Student.forms.FeePayment import FeePaymentForm
 from Student.forms.InterSchoolTransferForm import InterSchoolTransfersForm, KCSEResultsForm, ResultSlipForm
@@ -1205,7 +1205,7 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'reference': Reference,  # some object id
                 'email': Email,
             }
-            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
+            STDTransaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
                                        status='PENDING',
                                        description=Description)
             context['pesapal_url'] = self.get_payment_url(**order_info)

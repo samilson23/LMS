@@ -6,7 +6,7 @@ User = get_user_model()
 
 # Create your models here.
 
-class Transaction(models.Model):
+class STDTransaction(models.Model):
     PESAPAL_STATUS_CHOICES = (
         ('PENDING', 'PENDING'),
         ('COMPLETED', 'COMPLETED'),
