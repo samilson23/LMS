@@ -75,17 +75,6 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
-
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_SAVE_EVERY_REQUEST = True
-
 X_FRAME_OPTIONS = 'ALLOWALL'
 XS_SHARING_ALLOWED_METHODS = ['POST', 'GET']
 
