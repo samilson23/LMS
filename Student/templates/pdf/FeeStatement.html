@@ -1,0 +1,204 @@
+{% load static %}
+<style type="text/css">
+     @media print{
+        @page {
+            size: A4;
+            left: 1.27cm;
+            right: 1.27cm;
+            bottom: 1.27cm;
+            top: 1.27cm;
+        }
+     }
+     @font-face {
+        font-family: "Edwardian Script ITC";
+        src: url("/static/fonts/ITCEDSCR.TTF");
+     }
+     @font-face {
+        font-family: "Algerian";
+        src: url("/static/fonts/ALGER.TTF");
+     }
+    .school
+    {
+        font-size: 16px;
+        text-align: center;
+    }
+    .title
+    {
+        font-weight: bold;
+        font-size: 13px;
+        text-align: center;
+    }
+    .charges
+    {
+        text-align: left;
+        font-size: 15px;
+        padding: 15px;
+    }
+    .header2
+    {
+        text-align: left;
+        font-size: 14px;
+        padding-top: 5px;
+        padding-left: 5px;
+    }
+    .heading
+    {
+        text-align: left;
+        font-size: 20px;
+        padding: 15px;
+    }
+    .header3
+    {
+        text-align: left;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 15px;
+        font-family: Georgia, serif;
+    }
+    td {
+        height: auto;
+    }
+</style>
+<section class="content">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="box">
+           <div class="box-body">
+             <table style="width:100%">
+                 <tr>
+                     <td colspan="3">
+                         <div style="text-align:center;">
+                             <img src="{% static 'img/logo.png' %}" alt="logo" style="height:120px;width:120px;border-radius:4px;"/>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="school" style="font-family: Algerian;"><h1>SAMILSON&nbsp;&nbsp;UNIVERSITY</h1></div></td>
+                 </tr>
+                 <tr>
+                     <td colspan="3"><div class="title" style="font-family:Times New Roman;"><h1>FEE STRUCTURE</h1></div></td>
+                 </tr>
+             </table>
+             <table class="table" style="width:100%" border="1">
+                 <tr>
+                     <td colspan="3">
+                         <table class="table" style="width:100%">
+                             <tr>
+                                 <td><div class="header2" style="font-family:Georgia, serif;">{{ student.course.name|upper }}</div></td>
+                             </tr>
+                         </table>
+                     </td>
+                 </tr>
+             </table>
+             <table class="table" style="width: 100%" border="1">
+                    {% for year, semesters in organized_data.items %}
+                    <tr>
+                        {% for semester, entries in semesters.items %}
+                            <td>
+                                <table border="1">
+                                    <tr>
+                                        <td><div class="header3">{{semester}} (Ksh.)</div></td>
+                                    </tr>
+                                    <tr>
+                                        {% for entry in entries %}
+                                            <td>
+                                                <table border="1">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Tuition: ({{entry.tuition}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student Organization: ({{entry.student_organization}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student Activity: ({{entry.student_activity}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student ID Card: ({{entry.student_id_card}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Computer Fee: ({{entry.computer_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Examination Fee: ({{entry.examination_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Internet: ({{entry.internet_connectivity}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Kuccps Placement Fee: ({{entry.kuccps_placement_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Library Fee: ({{entry.library_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Maintenance Fee: ({{entry.maintenance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Maintenance Fee: ({{entry.maintenance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Medical Fee: ({{entry.medical_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Quality Assurance: ({{entry.quality_assurance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Reg Fee: ({{entry.registration_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Amenity Fee: ({{entry.amenity_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Attachment: ({{entry.attachment}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="header3">Total Fee Payable: ({{entry.total}})</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                </table>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+             </table>
+          </div>
+        </div>
+      </div>
+</section>
