@@ -1223,7 +1223,7 @@ class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
         }
         trans = Transaction.objects.get(merchant_reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
-        description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+        description = f'{trans.created} Fee Collection {merchant_reference}'
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
