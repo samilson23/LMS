@@ -1199,11 +1199,11 @@ class SubmitPayment(LoginRequiredMixin, View):
         return HttpResponseRedirect('Method Not allowed')
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        for key, value in request.GET.items():
-            print(f'{key}: {value}')
+        print(request.GET)
 
 def get_fee_structure(request, department):
     timestamp = timezone.now().strftime("%A, %d, %B, %Y")
