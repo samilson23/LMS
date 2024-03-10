@@ -4,7 +4,7 @@ from . import pesapal_processor3
 
 pesapal_processor3.consumer_key = 'qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW'
 pesapal_processor3.consumer_secret = 'osGQ364R49cXKeOYSpaOnT++rHs='
-pesapal_processor3.testing = False
+pesapal_processor3.testing = True
 
 
 def post_transaction(Reference, FirstName, LastName, Email, PhoneNumber, Description, Amount, Type):
