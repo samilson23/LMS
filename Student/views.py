@@ -1206,6 +1206,7 @@ class CompleteTransaction(LoginRequiredMixin, View):
         params = request.GET
         print(params)
         payment_method = params['pesapal_payment_method']
+        print(payment_method)
         transaction_date = params['pesapal_transaction_date']
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
@@ -1216,7 +1217,7 @@ class CompleteTransaction(LoginRequiredMixin, View):
         trans = Transaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{transaction_date} Fee Collection {merchant_reference}'
-        trans.payment_method = payment_method
+        # trans.payment_method = payment_method
         trans.description = description
         trans.status = p_status
         trans.save()
