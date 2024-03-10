@@ -1221,8 +1221,6 @@ class CompleteTransaction(LoginRequiredMixin, View):
         print(merchant_reference)
         print(transaction_tracking_id)
         detailed = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
-        payment_method = detailed['payment_method']
-        print(payment_method)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         print(status)
         p_status = str(status).split('=')[1]
