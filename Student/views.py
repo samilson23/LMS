@@ -1203,7 +1203,7 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        print(request.GET)
+        print(request.body)
         return HttpResponse('Success')
 
 def get_fee_structure(request, department):
