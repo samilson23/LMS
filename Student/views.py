@@ -1214,9 +1214,8 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
-    @staticmethod
-    def get(request, *args, **kwargs):
-        params = request.GET
+    def get(self, *args, **kwargs):
+        params = self.request.GET
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
         param = {
