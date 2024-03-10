@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'User',
     'crispy_bootstrap4',
     'crispy_forms',
@@ -57,8 +58,11 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'datatableview',
     'Pesapal',
+    'django_pesapal',
     'Finance'
 ]
+
+SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -179,3 +183,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+PESAPAL_CONSUMER_KEY = 'HRwr4SWhFF+LrthH83eBpC4t3tMKT37G'
+PESAPAL_CONSUMER_SECRET = '8537Msq3uMjkqV8qzKM5eBakmv0='
+PESAPAL_OAUTH_CALLBACK_URL = 'CompleteTransaction'
+PESAPAL_DEMO = False

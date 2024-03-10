@@ -45,7 +45,7 @@
               <div class="box-title">Fee Payment</div>
             </div>
             <div class="box-body">
-              <form role="form" action="{% url 'SubmitPayment' %}" method="post">
+              <form role="form" action="{% url 'SubmitPayment' %}" method="get">
                 {% csrf_token %}
                 <div class="form-group">
                  {{form.amount|as_crispy_field}}

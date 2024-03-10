@@ -33,6 +33,8 @@ from Student.forms.InterSchoolTransferForm import InterSchoolTransfersForm, KCSE
 from Student.forms.LecturerEvaluationForm import LecEvaluationForm
 from Student.models import *
 from django.http import HttpResponse
+
+from django_pesapal.views import PaymentRequestMixin, IPNCallbackView
 from utils.Calendar import Calendar
 
 from utils.pdf_generator import render_to_pdf
@@ -1173,61 +1175,64 @@ class Checkout(LoginRequiredMixin, View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class SubmitPayment(LoginRequiredMixin, View):
-    @staticmethod
-    def post(request):
-        if request.method == 'POST':
-            user = User.objects.get(id=request.user.id)
-            student = Students.objects.get(user=user.id)
-            reference = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
-            form = FeePaymentForm(request.POST)
-            if form.is_valid():
-                Amount = form.cleaned_data['amount']
-                Reference = reference
-                Description = 'Fee Payment'
-                AdmissionNumber = request.user
-                Type = 'MERCHANT'
-                FirstName = user.first_name
-                LastName = user.last_name
-                Email = user.email
-                PhoneNumber = student.phone_number
+class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
+    template_name = 'Financials/Checkout.html'
 
-                Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference, status='PENDING', description=Description)
-                iframe_src = pesapal_ops3.post_transaction(Reference, FirstName, LastName, Email, PhoneNumber, Description, Amount, Type)
-                return render(request, 'Financials/Checkout.html', {'iframe_src': iframe_src})
-            return render(request, 'Financials/Checkout.html')
-        return HttpResponseRedirect('Method Not allowed')
-
+    def get_context_data(self, **kwargs):
+        context = super(SubmitPayment, self).get_context_data(**kwargs)
+        '''
+                Authenticates with pesapal to get the payment iframe src
+                '''
+        user = User.objects.get(id=self.request.user.id)
+        student = Students.objects.get(user=user.id)
+        reference = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+        form = FeePaymentForm(self.request.GET)
+        if form.is_valid():
+            Amount = form.cleaned_data['amount']
+            Reference = reference
+            Description = 'Fee Payment'
+            AdmissionNumber = self.request.user
+            Type = 'MERCHANT'
+            FirstName = user.first_name
+            LastName = user.last_name
+            Email = user.email
+            PhoneNumber = student.phone_number
+            order_info = {
+                'first_name': FirstName,
+                'last_name': LastName,
+                'amount': Amount,
+                'description': Description,
+                'reference': Reference,  # some object id
+                'email': Email,
+            }
+            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
+                                       status='PENDING',
+                                       description=Description)
+            context['pesapal_url'] = self.get_payment_url(**order_info)
+            return context
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CompleteTransaction(LoginRequiredMixin, View):
-    @staticmethod
-    def get(request):
-        print(request.POST)
-        params = request.GET
-        for key, value in request.POST.items():
-            print(f'{key}: {value}')
-        merchant_reference = params['pesapal_merchant_reference']
-        transaction_tracking_id = params['pesapal_transaction_tracking_id']
-        print(merchant_reference)
-        print(transaction_tracking_id)
-        detailed = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
-        print(detailed)
-        status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
-        print(status)
-        p_status = str(status).split('=')[1]
-        trans = Transaction.objects.get(reference=merchant_reference)
+class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
+    def get(self, request, *args, **kwargs):
+        pesapal_mercharnt = request.GET.get('pesapal_mercharnt_reference')
+        pesapal_transaction_tracking_id = request.GET.get('pesapal_transaction_tracking_id')
+
+        transaction = self.transaction
+        trans = Transaction.objects.get(reference=pesapal_mercharnt)
         user = User.objects.get(id=trans.paid_by.id)
-        description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+        description = f'{trans.timestamp} Fee Collection {pesapal_mercharnt}'
         trans.description = description
-        trans.status = p_status
+        trans.status = transaction.status
         trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
         student.save()
-        FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount, balance=student.fee_balance)
-        return render(request, 'Financials/status.html', {'status': p_status})
+        FeeStatement.objects.create(user=user, doc_no=pesapal_mercharnt, description=description, payment_method=transaction.payment_method, credit=trans.amount,
+                                    balance=student.fee_balance)
+
+        return HttpResponse("pesapal_notification_type=CHANGE&pesapal_request_data=OK")
+
 
 def get_fee_structure(request, department):
     timestamp = timezone.now().strftime("%A, %d, %B, %Y")

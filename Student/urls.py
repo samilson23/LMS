@@ -2,6 +2,7 @@ from django.urls import path
 
 from Student.views import *
 
+
 urlpatterns = [
     path('Dashboard', Dashboard.as_view(), name='STDDashboard'),
     path('UpdateProfile', UpdateProfile.as_view(), name='STDUpdateProfile'),

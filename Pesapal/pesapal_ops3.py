@@ -1,5 +1,8 @@
 import urllib.request
 
+import requests
+from django.conf import settings
+
 from . import pesapal_processor3
 
 pesapal_processor3.consumer_key = 'HRwr4SWhFF+LrthH83eBpC4t3tMKT37G'
@@ -51,3 +54,62 @@ def get_payment_status(merchant_reference, transaction_tracking_id):
     response = urllib.request.urlopen(url)
 
     return response.read()
+
+
+def get_payment_status1(self, **kwargs):
+
+        """
+        Query the payment status from pesapal using the `transaction_id`
+        and the `merchant_reference_id`
+
+        Params should include the following keys:
+            Required params: `pesapal_merchant_reference`,
+            `pesapal_transaction_tracking_id`
+        """
+
+        params = {
+            "pesapal_merchant_reference": "",
+            "pesapal_transaction_tracking_id": "",
+        }
+
+        params.update(**kwargs)
+
+        signed_request = self.sign_request(params, settings.PESAPAL_QUERY_STATUS_LINK)
+
+        url = signed_request.to_url()
+
+        response = requests.get(
+            url, headers={"content-type": "text/namevalue; charset=utf-8"}
+        )
+        if response.status_code != requests.codes.ok:
+            comm_status = False
+        else:
+            comm_status = True
+
+        response_data = {}
+        response_data["raw_request"] = url
+        response_data["raw_response"] = response.text
+        response_data["comm_success"] = comm_status
+
+        _, values = response.text.split("=")
+        if values == 'INVALID':
+            response_data["payment_status"] = values
+            return response_data
+
+        _, payment_method, status, _ = values.split(",")
+        response_data["payment_status"] = status
+        response_data["payment_method"] = payment_method
+
+        return response_data
+
+
+def process_payment_status(self):
+    params = self.get_params()
+
+    self.transaction = get_object_or_404(
+        merchant_reference=self.merchant_reference,
+        pesapal_transaction=self.transaction_id,
+    )
+
+    # check status from pesapal server
+    response = self.get_payment_status(**params)

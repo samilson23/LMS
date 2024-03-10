@@ -33,6 +33,7 @@ urlpatterns = [
     path('Lecturer/', include('Lecturer.urls')),
     path('Finance/', include('Finance.urls')),
     path('Student/', include('Student.urls')),
+    path('Pespal/', include('django_pesapal.urls'), name='pesapal'),
     path('ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
     path('ckeditor/browse/', never_cache(login_required(ckeditor_views.browse)), name='ckeditor_browse'),
 ]
