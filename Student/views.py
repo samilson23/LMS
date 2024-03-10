@@ -1207,7 +1207,7 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'email': Email,
             }
             STDTransaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
-                                       payment_status='PENDING')
+                                       status='PENDING')
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
