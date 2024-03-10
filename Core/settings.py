@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'utils.UserActivityMiddleWare.UserActivityMiddleWare',
     'utils.ActiveUserCountMiddleWare.ActiveUserCount',
+    "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
 CACHES = {

@@ -1,11 +1,12 @@
 from random import randint
 
-from django.db.models.signals import pre_save
+from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 from Faculty.models import Department, Faculty, Course, LecturerEvaluation, SemesterReg
 from Student.models import Students, ExamCards
-from Student.views import ExamCard
+User = get_user_model()
 
 
 @receiver(pre_save, sender=Students)

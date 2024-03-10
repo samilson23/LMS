@@ -28,13 +28,7 @@
         font-size: 13px;
         text-align: center;
     }
-    .heading
-    {
-        text-align: center;
-        font-weight: bold;
-        font-size: 15px;
-    }
-    .units
+    .charges
     {
         text-align: left;
         font-size: 15px;
@@ -47,12 +41,18 @@
         padding-top: 5px;
         padding-left: 5px;
     }
+    .heading
+    {
+        text-align: left;
+        font-size: 20px;
+        padding: 15px;
+    }
     .header3
     {
         text-align: left;
         font-size: 16px;
         font-weight: bold;
-        padding: 5px;
+        padding: 15px;
         font-family: Georgia, serif;
     }
     td {
@@ -90,126 +90,113 @@
                      </td>
                  </tr>
              </table>
-               <table class="table" style="width: 100%" border="1">
-                   <tr>
-                       <td></td>
-                       {% for queryset in queryset %}
-                         <td> <div class="header3">{{queryset.stage.stage}}</div></td>
+             <table class="table" style="width: 100%" border="1">
+                    {% for year, semesters in organized_data.items %}
+                    <tr>
+                        {% for semester, entries in semesters.items %}
+                            <td>
+                                <table border="1">
+                                    <tr>
+                                        <td><div class="header3">{{semester}} (Ksh.)</div></td>
+                                    </tr>
+                                    <tr>
+                                        {% for entry in entries %}
+                                            <td>
+                                                <table border="1">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Tuition: ({{entry.tuition}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student Organization: ({{entry.student_organization}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student Activity: ({{entry.student_activity}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Student ID Card: ({{entry.student_id_card}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Computer Fee: ({{entry.computer_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Examination Fee: ({{entry.examination_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Internet: ({{entry.internet_connectivity}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Kuccps Placement Fee: ({{entry.kuccps_placement_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Library Fee: ({{entry.library_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Maintenance Fee: ({{entry.maintenance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Maintenance Fee: ({{entry.maintenance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Medical Fee: ({{entry.medical_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Quality Assurance: ({{entry.quality_assurance_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Reg Fee: ({{entry.registration_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Amenity Fee: ({{entry.amenity_fee}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="charges">Attachment: ({{entry.attachment}})</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="header3">Total Fee Payable: ({{entry.total}})</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                </table>
+                            </td>
                         {% endfor %}
-                       <td><div class="header3">Total Per Year</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Tuition</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.tuition}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_tuition}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Std Org</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.student_organization}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_student_organization}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Student Activity</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.student_activity}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_student_activity}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Student Id</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.student_id_card}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_student_id_card}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Computer Fee</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.computer_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_computer_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Examination Fee</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.examination_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{total_examination_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Internet</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.internet_connectivity}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{internet_connectivity}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Kuccps Placement Fee</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.kuccps_placement_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{kuccps_placement_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Library</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.library_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{library_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Maintenance</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.maintenance_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{maintenance_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Medical</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.medical_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{medical_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Quality</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.quality_assurance_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{quality_assurance_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Registration Fee</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.registration_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{registration_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Amenity</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.amenity_fee}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{amenity_fee}}</div></td>
-                   </tr>
-                   <tr>
-                       <td><div class="units">Attachment</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="units">{{queryset.attachment}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{attachment}}</div></td>
-                   </tr>
-                   <tr>
-                      <td><div class="units">Total Fee Payable</div></td>
-                       {% for queryset in queryset %}
-                            <td><div class="header3">{{queryset.total}}</div></td>
-                       {% endfor %}
-                       <td><div class="units">{{sub_total}}</div></td>
-                   </tr>
+                    </tr>
+                    {% endfor %}
              </table>
           </div>
         </div>

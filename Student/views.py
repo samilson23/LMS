@@ -228,6 +228,167 @@ class SemesterRegistration(LoginRequiredMixin, ListView):
                     except Deadlines.DoesNotExist:
                         return redirect('STDDashboard')
 
+
+def generate_ref_no(request):
+    is_unique = True
+    doc_no = 0
+    while is_unique:
+        doc_no = randint(10000, 999999)
+    ref = f'TRANS{doc_no}'
+    return ref
+
+
+def create_fee_statement(request, stage_id):
+    student = Students.objects.get(user=request.user)
+    fee_structure_data = FeeStructure.objects.filter(stage__id=stage_id)
+    for entry1 in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        tuition = f'Tuition Fees for {entry1.stage.stage}'
+        balance1 = float(entry1.tuition)
+        if entry1.tuition != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry1.tuition, description=tuition,
+                                    balance=balance1)
+    for entry2 in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        student_activity = f'Student Activity Fee for {entry2.stage.stage}'
+        balance = float(entry2.tuition + entry2.student_activity)
+        if entry2.student_activity != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.student_activity, description=student_activity,
+                                    balance=balance)
+    for entry3 in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        student_id_card = f'Student ID Card Fee {entry3.stage.stage}'
+        balance = float(entry3.tuition + entry3.student_id_card + entry3.student_activity)
+        if entry2.student_id_card != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.student_id_card, description=student_id_card,
+                                    balance=balance)
+
+    for entry3 in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        computer_fee = f'Computer Fee {entry3.stage.stage}'
+        balance = float(entry3.tuition + entry3.student_id_card + entry3.student_activity + entry3.computer_fee)
+        if entry2.computer_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.computer_fee, description=computer_fee,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        examination_fee = f'Examination Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee)
+        if entry.examination_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.examination_fee, description=examination_fee,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        internet_connectivity = f'Internet Connectivity {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity)
+        if entry.internet_connectivity != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.internet_connectivity, description=internet_connectivity,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        kuccps_placement_fee = f'Kuccps Placement Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee)
+        if entry.kuccps_placement_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.kuccps_placement_fee, description=kuccps_placement_fee,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        library_fee = f'Kuccps Placement Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee)
+        if entry.library_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.library_fee, description=library_fee,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        maintenance_fee = f'Maintenance Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee)
+        if entry.maintenance_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.maintenance_fee, description=maintenance_fee,
+                                    balance=balance)
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        medical_fee = f'Medical Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee)
+        if entry.medical_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.medical_fee, description=medical_fee,
+                                    balance=balance)
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        student_organization = f'Student Organization Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee + entry.student_organization)
+        if entry.student_organization != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_organization, description=student_organization,
+                                    balance=balance)
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        desc = f'Quality Assurance Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee)
+        if entry.quality_assurance_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_organization, description=desc,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        desc = f'Registration Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee)
+        if entry.registration_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.registration_fee, description=desc,
+                                    balance=balance)
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        desc = f'Amenity Fee {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee + entry.amenity_fee)
+        if entry.amenity_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.amenity_fee, description=desc,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        desc = f'Attachment {entry.stage.stage}'
+        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
+                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
+                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee + entry.amenity_fee + entry.attachment)
+        if entry.attachment != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.attachment, description=desc,
+                                    balance=balance)
+    return HttpResponse('okay')
+
+
+
 class SubmitSemReg(LoginRequiredMixin, View):
     @staticmethod
     def post(request):
@@ -235,17 +396,17 @@ class SubmitSemReg(LoginRequiredMixin, View):
             stage = request.POST.get('stage')
             stage_id = Stage.objects.get(id=stage)
             fee_structure = FeeStructure.objects.get(stage__id=stage_id.id)
+            student = Students.objects.get(user=request.user)
             total_sum = float(fee_structure.total)
-            print(total_sum)
-            user_id = User.objects.get(id=request.user.id)
-            sem = str(stage_id.stage)
-            student = Students.objects.get(user=user_id)
             student.total_billed += total_sum
             student.fee_balance += total_sum
             student.save()
+            user_id = User.objects.get(id=request.user.id)
+            sem = str(stage_id.stage)
             now = timezone.now()
             end_date = now + timedelta(days=120)
             parts = sem.split()
+            create_fee_statement(request, stage_id.id)
             card_number = randint(10000, 999999)
             for i in range(len(parts) - 1):
                 if parts[i] == "Year" and parts[i + 1].isdigit():
@@ -306,25 +467,30 @@ class UnitsRegistration(LoginRequiredMixin, View):
             messages.warning(self.request, 'Unit Registration is closed')
             return redirect('STDDashboard')
         else:
-            try:
-                stage = SemesterReg.objects.get(current=True, student=request.user.id)
-                pending_units = RegistrationReport.objects.filter(submitted=False, status=True, student=request.user.id)
-                list_submitted_unit = RegistrationReport.objects.filter(submitted=True, status=True,
-                                                                        student=request.user.id)
-            except SemesterReg.DoesNotExist:
-                stage = None
-                pending_units = None
-                list_submitted_unit = None
-            context = {
+            student = Students.objects.get(user=request.user.id)
+            if float(student.fee_balance) == 0:
+                try:
+                    stage = SemesterReg.objects.get(current=True, student=request.user.id)
+                    pending_units = RegistrationReport.objects.filter(submitted=False, status=True, student=request.user.id)
+                    list_submitted_unit = RegistrationReport.objects.filter(submitted=True, status=True,
+                                                                            student=request.user.id)
+                except SemesterReg.DoesNotExist:
+                    stage = None
+                    pending_units = None
+                    list_submitted_unit = None
+                context = {
 
-                'stage': stage,
-                'pending_units': pending_units,
-                'list_submitted_unit': list_submitted_unit,
-                'reg_exists': RegistrationReport.objects.filter(submitted=False, status=True,
-                                                                student=request.user.id).exists(),
-                'user': Students.objects.get(user=request.user.id),
-            }
-        return render(request, 'registration/unit_registration.html', context)
+                    'stage': stage,
+                    'pending_units': pending_units,
+                    'list_submitted_unit': list_submitted_unit,
+                    'reg_exists': RegistrationReport.objects.filter(submitted=False, status=True,
+                                                                    student=request.user.id).exists(),
+                    'user': Students.objects.get(user=request.user.id),
+                }
+                return render(request, 'registration/unit_registration.html', context)
+            else:
+                messages.info(self.request, 'Please Pay Your School Fees first')
+                return redirect('STDDashboard')
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -368,6 +534,7 @@ class SubmitUnits(LoginRequiredMixin, View):
         stage_id = request.POST.get("stage_id")
         semester = Stage.objects.get(id=stage_id)
         student = User.objects.get(id=request.user.id)
+        std = Students.objects.get(user=request.user.id)
         json_student = json.loads(unit_data)
         try:
             unit_id = UnitRegistration.objects.get(stage=stage_id, active=True, student=request.user.id)
@@ -1035,71 +1202,29 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def post(request):
-        if request.method == 'POST':
-            print(request.body)
-            print('POST')
-
+        for key, value in request.POST.items():
+            print(f'{key}: {value}')
 
 def get_fee_structure(request, department):
     timestamp = timezone.now().strftime("%A, %d, %B, %Y")
     fee_structure = FeeStructure.objects.filter(stage__department__hashid=department)
     total = FeeStructure.objects.values_list('stage__year', 'stage__department__name').distinct()
-    total_tuition = 0
-    total_student_activity = 0
-    total_student_organization = 0
-    total_student_id_card = 0
-    total_computer_fee = 0
-    total_examination_fee = 0
-    kuccps_placement_fee = 0
-    internet_connectivity = 0
-    library_fee = 0
-    maintenance_fee = 0
-    medical_fee = 0
-    registration_fee = 0
-    quality_assurance_fee = 0
-    amenity_fee = 0
-    attachment = 0
-    sub_total = 0
-    for year, department in total:
-        sum_total = FeeStructure.objects.filter(stage__year=year, stage__department__name=department)
-        total_tuition = sum_total.aggregate(total_tuition=Sum('tuition'))['total_tuition']
-        total_student_activity = sum_total.aggregate(total_student_activity=Sum('student_activity'))['total_student_activity']
-        total_student_organization = sum_total.aggregate(total_student_organization=Sum('student_organization'))['total_student_organization']
-        total_student_id_card = sum_total.aggregate(total_student_id_card=Sum('student_id_card'))['total_student_id_card']
-        total_computer_fee = sum_total.aggregate(total_computer_fee=Sum('computer_fee'))['total_computer_fee']
-        total_examination_fee = sum_total.aggregate(total_examination_fee=Sum('examination_fee'))['total_examination_fee']
-        internet_connectivity = sum_total.aggregate(internet_connectivity=Sum('internet_connectivity'))['internet_connectivity']
-        kuccps_placement_fee = sum_total.aggregate(kuccps_placement_fee=Sum('kuccps_placement_fee'))['kuccps_placement_fee']
-        library_fee = sum_total.aggregate(library_fee=Sum('library_fee'))['library_fee']
-        maintenance_fee = sum_total.aggregate(maintenance_fee=Sum('maintenance_fee'))['maintenance_fee']
-        medical_fee = sum_total.aggregate(medical_fee=Sum('medical_fee'))['medical_fee']
-        quality_assurance_fee = sum_total.aggregate(quality_assurance_fee=Sum('quality_assurance_fee'))['quality_assurance_fee']
-        registration_fee = sum_total.aggregate(registration_fee=Sum('registration_fee'))['registration_fee']
-        amenity_fee = sum_total.aggregate(amenity_fee=Sum('amenity_fee'))['amenity_fee']
-        attachment = sum_total.aggregate(attachment=Sum('attachment'))['attachment']
-        sub_total = sum_total.aggregate(total=Sum('total'))['total']
+    organized_data = {}
+    for entry in fee_structure:
+        year = entry.stage.year
+        semester = entry.stage.stage
+        if year not in organized_data:
+            organized_data[year] = {}
+        if semester not in organized_data[year]:
+            organized_data[year][semester] = []
+        organized_data[year][semester].append(entry)
     if fee_structure.exists():
         context = {
             'queryset': fee_structure,
             'user': User.objects.get(id=request.user.id),
             'student': Students.objects.get(user=request.user.id),
             'timestamp': timestamp,
-            'total_tuition': total_tuition,
-            'total_student_activity': total_student_activity,
-            'total_student_organization': total_student_organization,
-            'total_student_id_card': total_student_id_card,
-            'total_computer_fee': total_computer_fee,
-            'total_examination_fee': total_examination_fee,
-            'internet_connectivity': internet_connectivity,
-            'kuccps_placement_fee': kuccps_placement_fee,
-            'library_fee': library_fee,
-            'maintenance_fee': maintenance_fee,
-            'medical_fee': medical_fee,
-            'quality_assurance_fee': quality_assurance_fee,
-            'registration_fee': registration_fee,
-            'amenity_fee': amenity_fee,
-            'attachment': attachment,
-            'sub_total': sub_total,
+            'organized_data': organized_data,
         }
         pdf = render_to_pdf('pdf/FeeStructure.html', context)
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -1127,10 +1252,34 @@ class FeeStructures(LoginRequiredMixin, View):
 
 
 
-class FeeStatement(LoginRequiredMixin, View):
+def get_fee_statement(request, student):
+    fee_statement = FeeStatement.objects.filter(user__hashid=student)
+    print(fee_statement)
+    if fee_statement.exists():
+        context = {
+            'queryset': fee_statement,
+            'user': User.objects.get(id=request.user.id),
+            'student': Students.objects.get(user=request.user.id),
+            'stage': SemesterReg.objects.filter(current=True, student=request.user)
+        }
+        pdf = render_to_pdf('pdf/FeeStatement.html', context)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        name = str(request.user.username)
+        username = name.replace('/', '')
+        filename = 'FeeStatement-%s.pdf' % username
+        content = 'filename=%s' % filename
+        response['Content-Disposition'] = content
+        return response
+    else:
+        return HttpResponse('Resource does not exist please contact system administrator')
+
+
+class FeeStatements(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        return render(request, 'Financials/FeeStatement.html')
+        user = User.objects.get(id=request.user.id)
+        get_fee_statement(request, user.hashid)
+        return render(request, 'Financials/FeeStatement.html', {'user': user})
 
 
 class PaymentReceipts(LoginRequiredMixin, ListView):

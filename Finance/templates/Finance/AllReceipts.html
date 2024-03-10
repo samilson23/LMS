@@ -51,9 +51,8 @@
                       <th>Reference</th>
                       <th>Mercharnt Ref</th>
                       <th>Description</th>
-                      <th>Status</th>
                       <th>Method</th>
-                      <th>Action</th>
+                      <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -65,23 +64,9 @@
                         <td>{{object.reference}}</td>
                         <td>{{object.mercharnt_reference}}</td>
                         <td>{{object.description}}</td>
-                        <td>{{object.status}}</td>
                         <td>{{object.payment_method}}</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-xs-4">
-                              <a href="" class="btn btn-info btn-sm text-sm">Verify Payment</a>
-                            </div>
-                            <div class="col-xs-4">
-                              {% if object.status == 'PENDING' %}
-                                <a href="" class="btn btn-success btn-sm text-sm">Approve</a>
-                              {% endif %}
-                            </div>
-                            <div class="col-xs-4">
-                              <a href="" class="btn btn-warning btn-sm text-sm">View Details</a>
-                            </div>
-                          </div>
-                        </td>
+                        <td>{{object.status}}</td>
+                        <td></td>
                       </tr>
                     {% endfor %}
                     </tbody>

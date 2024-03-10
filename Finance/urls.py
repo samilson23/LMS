@@ -12,4 +12,8 @@ urlpatterns = [
     path('SubmitFeeStructure/', SubmitFeeStructure.as_view(), name='SubmitFeeStructure'),
     path('FetchData/', FetchData.as_view(), name='FetchData'),
     path('ListFeeStructures/', ListFeeStructures.as_view(), name='ListFeeStructures'),
+    path('ListStudents/', ListStudents.as_view(), name='FinanceListStudents'),
+    path('StudentStatements/<student>', StudentStatement.as_view(), name='StudentStatement'),
+    path('StudentReceipts/<student>', StudentReceipts.as_view(), name='StudentReceipts'),
+    path('Receipts/', Receipts.as_view(), name='AllReceipts'),
 ]

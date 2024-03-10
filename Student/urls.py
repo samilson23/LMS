@@ -45,7 +45,9 @@ urlpatterns = [
     path('Checkout/', Checkout.as_view(), name='Checkout'),
     path('CompleteTransaction/', CompleteTransaction.as_view(), name='CompleteTransaction'),
     path('FeeStructure/', FeeStructures.as_view(), name='FeeStructure'),
-    path('FeeStatement/', FeeStatement.as_view(), name='FeeStatement'),
+    path('FeeStatement/', FeeStatements.as_view(), name='FeeStatement'),
     path('PaymentReceipts/', PaymentReceipts.as_view(), name='PaymentReceipts'),
     path('get_fee_structure/<department>/', get_fee_structure, name='get_fee_structure'),
+    path('get_fee_statement/<student>/', get_fee_statement, name='get_fee_statement'),
+    path('create_fee_statement/<stage_id>/', create_fee_statement, name='create_fee_statement'),
 ]

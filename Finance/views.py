@@ -11,7 +11,8 @@ from Finance.forms.CreateFeeStructureForm import CreateFeeStructureForm
 from Finance.models import *
 from Finance.forms.CreateProfile import *
 from Faculty.models import *
-from Student.models import FeeStructure
+from Pesapal.models import Transaction
+from Student.models import FeeStructure, Students, FeeStatement
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -186,3 +187,29 @@ class FetchData(LoginRequiredMixin, View):
 class ListFeeStructures(LoginRequiredMixin, ListView):
     template_name = 'Finance/ListFeeStructures.html'
     model = FeeStructure
+
+
+class ListStudents(LoginRequiredMixin, ListView):
+    model = Students
+    template_name = 'Finance/ListStudents.html'
+
+
+class StudentStatement(LoginRequiredMixin, ListView):
+    template_name = 'Finance/FeeStatements.html'
+
+    def get_queryset(self):
+        return FeeStatement.objects.filter(user__hashid=self.kwargs['student'])
+
+
+class StudentReceipts(LoginRequiredMixin, ListView):
+    template_name = 'Finance/Receipts.html'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(paid_by__hashid=self.kwargs['student'])
+
+
+class Receipts(LoginRequiredMixin, ListView):
+    template_name = 'Finance/AllReceipts.html'
+
+    def get_queryset(self):
+        return Transaction.objects.all()

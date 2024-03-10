@@ -2,6 +2,7 @@
 {% url 'FinanceDashboard' as FinanceDashboard %}
 {% url 'FinanceListDepartments' as FinanceListDepartments %}
 {% url 'ListFeeStructures' as ListFeeStructures %}
+{% url 'FinanceListStudents' as FinanceListStudents %}
 {% url 'CreateFeeStructure' department=dept.hashid as CreateFeeStructure %}
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -26,22 +27,22 @@
         </li>
         <li class="{% if request.path == CreateFeeStructure %} active {% endif %}{% if request.path == FinanceListDepartments %} active {% endif %}">
             <a href="{% url 'FinanceListDepartments' %}">
-              <i class=" fa fa-building"></i>Departments
+              <i class=" fa fa-building"></i> Departments
             </a>
         </li>
         <li class="{% if request.path == ListFeeStructures %} active {% endif %}">
             <a href="{% url 'ListFeeStructures' %}">
-                <i class=" fa fa-calendar-times-o"></i><span>Fee Structures</span>
+                <i class=" fa fa-file-pdf-o"></i><span> Fee Structures</span>
+            </a>
+        </li>
+        <li class="{% if request.path == FinanceListStudents %} active {% endif %}">
+            <a href="{% url 'FinanceListStudents' %}">
+                <i class=" fa fa-users"></i><span> Students</span>
             </a>
         </li>
         <li class="">
-            <a href="">
-                <i class=" fa fa-calendar-times-o"></i><span>Students</span>
-            </a>
-        </li>
-        <li class="">
-            <a href="">
-                <i class=" fa fa-calendar-times-o"></i><span>Transactions</span>
+            <a href="{% url 'AllReceipts' %}">
+                <i class=" fa fa-money"></i><span> Transactions</span>
             </a>
         </li>
       </ul>
