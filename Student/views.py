@@ -1203,20 +1203,28 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        if request.method == 'POST':
-            print(request.body)
-            print('POST')
-        else:
-            params = request.GET
-            print(params)
+        params = request.GET
+        print(params)
+        payment_method = request.GET.get('pesapal_payment_method')
+        transaction_date = request.GET.get('pesapal_transaction_date')
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
         print(merchant_reference)
         print(transaction_tracking_id)
-        # status = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
-
+        trans = Transaction.objects.get(reference=merchant_reference)
+        user = User.objects.get(id=trans.paid_by.id)
+        description = f'{transaction_date} Fee Collection {merchant_reference}'
+        trans.payment_method = payment_method
+        trans.description = description
+        trans.status = p_status
+        trans.save()
+        student = Students.objects.get(user=user)
+        student.total_paid += float(trans.amount)
+        student.fee_balance -= float(trans.amount)
+        student.save()
+        FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount, balance=student.fee_balance)
         return render(request, 'Financials/status.html', {'status': p_status})
 
 def get_fee_structure(request, department):
