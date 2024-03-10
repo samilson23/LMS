@@ -1206,9 +1206,8 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'reference': Reference,  # some object id
                 'email': Email,
             }
-            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
-                                       status='PENDING',
-                                       description=Description)
+            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, merchant_reference=Reference,
+                                       payment_status='PENDING')
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
@@ -1226,7 +1225,7 @@ class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
         print(response)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
-        trans = Transaction.objects.get(reference=merchant_reference)
+        trans = Transaction.objects.get(merchant_reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
@@ -1236,7 +1235,7 @@ class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
         student.save()
         FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
                                     balance=student.fee_balance)
-        return render(request, 'Financials/status.html', {'status': trans.payment_status})
+        return HttpResponse("Success")
 
 
 def get_fee_structure(request, department):
