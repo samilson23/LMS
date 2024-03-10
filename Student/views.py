@@ -1205,8 +1205,8 @@ class CompleteTransaction(LoginRequiredMixin, View):
     def get(request):
         params = request.GET
         print(params)
-        payment_method = request.GET.get('pesapal_payment_method')
-        transaction_date = request.GET.get('pesapal_transaction_date')
+        payment_method = params['pesapal_payment_method']
+        transaction_date = params['pesapal_transaction_date']
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
         print(merchant_reference)
