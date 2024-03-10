@@ -1203,15 +1203,15 @@ class SubmitPayment(LoginRequiredMixin, View):
 class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        print(body)
+        print(request.body)
         params = request.GET
         transaction_date = params['pesapal_transaction_date']
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
         print(merchant_reference)
         print(transaction_tracking_id)
+        detailed = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
+        print(detailed)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
         trans = Transaction.objects.get(reference=merchant_reference)
