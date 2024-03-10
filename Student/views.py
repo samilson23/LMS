@@ -34,6 +34,7 @@ from Student.forms.LecturerEvaluationForm import LecEvaluationForm
 from Student.models import *
 from django.http import HttpResponse
 
+from django_pesapal.models import Transaction
 from django_pesapal.views import PaymentRequestMixin, IPNCallbackView
 from utils.Calendar import Calendar
 
@@ -1205,38 +1206,38 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'reference': Reference,  # some object id
                 'email': Email,
             }
-            STDTransaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
+            Transaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
                                        status='PENDING',
                                        description=Description)
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CompleteTransaction(LoginRequiredMixin, View):
+class CompleteTransaction(LoginRequiredMixin, IPNCallbackView):
     @staticmethod
     def get(request, *args, **kwargs):
         params = request.GET
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
-        print(merchant_reference)
-        print(transaction_tracking_id)
-        detailed = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id)
+        param = {
+            "pesapal_merchant_reference": merchant_reference,
+            "pesapal_transaction_tracking_id": transaction_tracking_id,
+        }
+        response = PaymentRequestMixin.get_payment_status(**param)
+        print(response)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
-        print(status)
         p_status = str(status).split('=')[1]
-        trans = STDTransaction.objects.get(reference=merchant_reference)
+        trans = Transaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
-        trans.status = p_status
-        trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
         student.save()
         FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
                                     balance=student.fee_balance)
-        return render(request, 'Financials/status.html', {'status': p_status})
+        return render(request, 'Financials/status.html', {'status': trans.payment_status})
 
 
 def get_fee_structure(request, department):

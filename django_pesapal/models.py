@@ -1,7 +1,11 @@
 
 import uuid
+
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+User = get_user_model()
 
 
 class Transaction(models.Model):
@@ -16,8 +20,9 @@ class Transaction(models.Model):
         (COMPLETED, _("Completed")),
         (FAILED, _("Failed")),
     )
+    paid_by = models.ForeignKey(User, on_delete=models.CASCADE)
     pesapal_transaction = models.UUIDField(default=uuid.uuid4, editable=False)
-    merchant_reference = models.IntegerField(db_index=True)
+    merchant_reference = models.CharField(db_index=True, max_length=100)
     amount = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     created = models.DateTimeField(auto_now_add=True)
     payment_status = models.IntegerField(choices=TRANSACTION_STATUS, default=PENDING)

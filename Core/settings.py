@@ -187,4 +187,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 PESAPAL_CONSUMER_KEY = 'HRwr4SWhFF+LrthH83eBpC4t3tMKT37G'
 PESAPAL_CONSUMER_SECRET = '8537Msq3uMjkqV8qzKM5eBakmv0='
 PESAPAL_OAUTH_CALLBACK_URL = 'CompleteTransaction'
+PESAPAL_QUERY_STATUS_LINK = 'https://www.pesapl.com/API/QUeryPaymentDetails'
 PESAPAL_DEMO = False
