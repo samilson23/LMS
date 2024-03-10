@@ -1204,6 +1204,7 @@ class CompleteTransaction(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
         print(request.GET)
+        return HttpResponse('Success')
 
 def get_fee_structure(request, department):
     timestamp = timezone.now().strftime("%A, %d, %B, %Y")
