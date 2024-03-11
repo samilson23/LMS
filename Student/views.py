@@ -1221,7 +1221,10 @@ class CompleteTransaction(LoginRequiredMixin, View):
         print(merchant_reference)
         print(transaction_tracking_id)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
+        detailed_data = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
+        payment_method = str(detailed_data).split('=')[2]
+        print(payment_method)
         trans = STDTransaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
@@ -1232,7 +1235,7 @@ class CompleteTransaction(LoginRequiredMixin, View):
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
         student.save()
-        FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
+        FeeStatement.objects.create(user=user, doc_no=merchant_reference, payment_method=payment_method, description=description, credit=trans.amount,
                                     balance=student.fee_balance)
         return render(request, 'Financials/status.html', {'status': p_status})
 
