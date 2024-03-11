@@ -123,12 +123,6 @@ def postDirectOrder(params, request_data):
     # print etree.tostring(root_xml)
     default_params = {
         'oauth_callback': '',
-        # 'oauth_consumer_key': '',
-        # 'oauth_nonce': '',
-        # 'oauth_signature': '',
-        # 'oauth_signature_method': '',
-        # 'oauth_timestamp': '',
-        # 'oauth_version': '1.0',
         'pesapal_request_data': pesapal_request_data
     }
 

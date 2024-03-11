@@ -70,15 +70,12 @@
                         <td>
                           <div class="row">
                             <div class="col-xs-4">
-                              <a href="" class="btn btn-info btn-sm text-sm">Verify Payment</a>
-                            </div>
-                            <div class="col-xs-4">
                               {% if object.status == 'PENDING' %}
                                 <a href="" class="btn btn-success btn-sm text-sm">Approve</a>
                               {% endif %}
                             </div>
                             <div class="col-xs-4">
-                              <a href="" class="btn btn-warning btn-sm text-sm">View Details</a>
+                              <a href="{% url 'PaymentDetails' object.reference %}" class="btn btn-warning btn-sm text-sm">Payment Details</a>
                             </div>
                           </div>
                         </td>
