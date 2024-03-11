@@ -228,9 +228,9 @@ class PaymentDetails(LoginRequiredMixin, View):
         if len(status) >= 2:
             p_status = str(payment_status).split('=')[1]
             if p_status == 'COMPLETED':
-                params = request.GET
+                params = request.GET.get('pesapal_transaction_tracking_id')
                 transaction_tracking_id = params['pesapal_transaction_tracking_id']
-                detailed_data = pesapal_ops3.get_detailed_order_status(param, transaction_tracking_id).decode(
+                detailed_data = pesapal_ops3.get_detailed_order_status(param, params).decode(
                     'utf-8')
                 payment_method = str(detailed_data).split(',')[1]
                 user = User.objects.get(id=trans.paid_by.id)
