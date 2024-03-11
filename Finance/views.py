@@ -221,7 +221,8 @@ class PaymentDetails(LoginRequiredMixin, View):
     @staticmethod
     def get(request, reference):
         trans = STDTransaction.objects.get(reference=reference)
-        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(trans.reference).decode('utf-8')
+        merchant_reference = trans.reference
+        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(merchant_reference).decode('utf-8')
         status = str(payment_status).split("=")[1]
 
         # if status == 'PENDING':
