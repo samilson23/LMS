@@ -221,31 +221,34 @@ class PaymentDetails(LoginRequiredMixin, View):
     @staticmethod
     def get(request, reference):
         trans = STDTransaction.objects.get(reference=reference)
-        params = trans.reference
-        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(params).decode('utf-8')
+        param = trans.reference
+        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(param).decode('utf-8')
         print(payment_status)
-
-        # if status == 'PENDING':
-        #     params = request.GET
-        #     transaction_tracking_id = params['pesapal_transaction_tracking_id']
-        #     detailed_data = pesapal_ops3.get_detailed_order_status(trans.reference, transaction_tracking_id).decode(
-        #         'utf-8')
-        #     payment_method = str(detailed_data).split(',')[1]
-        #     user = User.objects.get(id=trans.paid_by.id)
-        #     description = f'{trans.timestamp} Fee Collection {trans.reference}'
-        #     trans.description = description
-        #     trans.status = 'COMPLETED'
-        #     trans.payment_method = payment_method
-        #     trans.mercharnt_reference = transaction_tracking_id
-        #     trans.save()
-        #     student = Students.objects.get(user=user)
-        #     student.total_paid += float(trans.amount)
-        #     student.fee_balance -= float(trans.amount)
-        #     student.save()
-        #     FeeStatement.objects.create(user=user, doc_no=trans.reference, description=description,
-        #                                 credit=trans.amount,
-        #                                 balance=student.fee_balance)
-        return render(request, 'Finance/status.html', {'status': payment_status})
-        # else:
-        #     return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid})
+        status = str(payment_status).split('=')
+        if len(status) >= 2:
+            p_status = str(payment_status).split('=')[1]
+            if p_status == 'COMPLETED':
+                params = request.GET
+                transaction_tracking_id = params['pesapal_transaction_tracking_id']
+                detailed_data = pesapal_ops3.get_detailed_order_status(param, transaction_tracking_id).decode(
+                    'utf-8')
+                payment_method = str(detailed_data).split(',')[1]
+                user = User.objects.get(id=trans.paid_by.id)
+                description = f'{trans.timestamp} Fee Collection {trans.reference}'
+                trans.description = description
+                trans.status = 'COMPLETED'
+                trans.payment_method = payment_method
+                trans.mercharnt_reference = transaction_tracking_id
+                trans.save()
+                student = Students.objects.get(user=user)
+                student.total_paid += float(trans.amount)
+                student.fee_balance -= float(trans.amount)
+                student.save()
+                FeeStatement.objects.create(user=user, doc_no=trans.reference, description=description,
+                                            credit=trans.amount,
+                                            balance=student.fee_balance)
+            return render(request, 'Finance/status.html', {'status': payment_status})
+        else:
+            messages.error(request, 'Transaction Does not exist')
+            return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid})
 
