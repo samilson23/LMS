@@ -1223,14 +1223,12 @@ class CompleteTransaction(LoginRequiredMixin, View):
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         detailed_data = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
-        payment_method = str(detailed_data).split('=')[2]
-        print(payment_method)
+        print(detailed_data)
         trans = STDTransaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
         trans.status = p_status
-        trans.payment_method = payment_method
         trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
