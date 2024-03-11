@@ -56,7 +56,7 @@ def get_payment_status(merchant_reference, transaction_tracking_id):
 
 def get_payment_status_by_mercharnt_ref(merchant_reference):
     post_params = {
-        'merchant_reference': merchant_reference
+        'pesapal_merchant_reference': merchant_reference
     }
     url = pesapal_processor3.queryPaymentStatusByMerchantRef(post_params)
     response = urllib.request.urlopen(url)

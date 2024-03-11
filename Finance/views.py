@@ -221,9 +221,9 @@ class PaymentDetails(LoginRequiredMixin, View):
     @staticmethod
     def get(request, reference):
         trans = STDTransaction.objects.get(reference=reference)
-        merchant_reference = trans.reference
-        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(merchant_reference).decode('utf-8')
-        status = str(payment_status).split("=")[1]
+        params = trans.reference
+        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(params).decode('utf-8')
+        print(payment_status)
 
         # if status == 'PENDING':
         #     params = request.GET
@@ -245,7 +245,7 @@ class PaymentDetails(LoginRequiredMixin, View):
         #     FeeStatement.objects.create(user=user, doc_no=trans.reference, description=description,
         #                                 credit=trans.amount,
         #                                 balance=student.fee_balance)
-        return render(request, 'Finance/status.html', {'status': status})
+        return render(request, 'Finance/status.html', {'status': payment_status})
         # else:
         #     return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid})
 
