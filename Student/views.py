@@ -1221,9 +1221,8 @@ class CompleteTransaction(LoginRequiredMixin, View):
         print(merchant_reference)
         print(transaction_tracking_id)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
-        print(status)
         p_status = str(status).split('=')[1]
-        trans = Transaction.objects.get(reference=merchant_reference)
+        trans = STDTransaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
