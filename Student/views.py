@@ -1230,12 +1230,13 @@ class CompleteTransaction(LoginRequiredMixin, View):
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
         trans.status = p_status
+        trans.payment_method = payment_method
         trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
         student.fee_balance -= float(trans.amount)
         student.save()
-        FeeStatement.objects.create(user=user, doc_no=merchant_reference, payment_method=payment_method, description=description, credit=trans.amount,
+        FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description, credit=trans.amount,
                                     balance=student.fee_balance)
         return render(request, 'Financials/status.html', {'status': p_status})
 
