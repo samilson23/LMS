@@ -212,4 +212,4 @@ class Receipts(LoginRequiredMixin, ListView):
     template_name = 'Finance/AllReceipts.html'
 
     def get_queryset(self):
-        return Transaction.objects.all()
+        return STDTransaction.objects.all()
