@@ -139,7 +139,6 @@ class PaymentRequestMixin(object):
 
         params = {
             "pesapal_merchant_reference": "",
-            "pesapal_transaction_tracking_id": "",
         }
 
         params.update(**kwargs)

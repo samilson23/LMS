@@ -1,6 +1,10 @@
+import urllib
+
+import oauth2 as oauth
+import requests
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -14,6 +18,8 @@ from Faculty.models import *
 from Pesapal import pesapal_ops3
 from Pesapal.models import STDTransaction
 from Student.models import FeeStructure, Students, FeeStatement
+from django_pesapal import conf as settings
+from django_pesapal.views import PaymentRequestMixin
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -216,39 +222,36 @@ class Receipts(LoginRequiredMixin, ListView):
         return STDTransaction.objects.all()
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class PaymentDetails(LoginRequiredMixin, View):
+def check_payment_details(reference):
+    consumer_key = settings.PESAPAL_CONSUMER_SECRET
+    consumer_secret = settings.PESAPAL_CONSUMER_SECRET
+
+    url = settings.PESAPAL_QUERY_STATUS_LINK
+    params = {
+        'pesapal_merchant_reference': reference,
+        'consumer_key': consumer_key,
+        'consumer_secret': consumer_secret
+    }
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        pesapal_response = response.json()
+        pesapal_transaction_tracking_id = pesapal_response.get('pesapal_transaction_tracking_id')
+        payment_method = pesapal_response.get('payment_method')
+
+        return pesapal_transaction_tracking_id, payment_method
+    else:
+        return HttpResponse('Transaction does not exist')
+
+
+class CheckStatus(LoginRequiredMixin, View):
     @staticmethod
     def get(request, reference):
-        trans = STDTransaction.objects.get(reference=reference)
-        param = trans.reference
-        payment_status = pesapal_ops3.get_payment_status_by_mercharnt_ref(param).decode('utf-8')
-        print(payment_status)
-        status = str(payment_status).split('=')
-        if len(status) >= 2:
-            p_status = str(payment_status).split('=')[1]
-            if p_status == 'COMPLETED':
-                transaction_tracking_id = request.GET.get('pesapal_transaction_tracking_id')
-                print(transaction_tracking_id)
-                detailed_data = pesapal_ops3.get_detailed_order_status(param, transaction_tracking_id).decode(
-                    'utf-8')
-                payment_method = str(detailed_data).split(',')[1]
-                user = User.objects.get(id=trans.paid_by.id)
-                description = f'{trans.timestamp} Fee Collection {trans.reference}'
-                trans.description = description
-                trans.status = 'COMPLETED'
-                trans.payment_method = payment_method
-                trans.mercharnt_reference = transaction_tracking_id
-                trans.save()
-                student = Students.objects.get(user=user)
-                student.total_paid += float(trans.amount)
-                student.fee_balance -= float(trans.amount)
-                student.save()
-                FeeStatement.objects.create(user=user, doc_no=trans.reference, description=description,
-                                            credit=trans.amount,
-                                            balance=student.fee_balance)
-            return render(request, 'Finance/status.html', {'status': payment_status})
-        else:
-            messages.error(request, 'Transaction Does not exist')
-            return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid})
-
+        merchant_ref = STDTransaction.objects.get(reference=reference)
+        pesapal_transaction_tracking_id, payment_method = check_payment_details(merchant_ref.reference)
+        merchant_ref.mercharnt_reference = pesapal_transaction_tracking_id
+        merchant_ref.payment_method = payment_method
+        merchant_ref.status = 'COMPLETED'
+        merchant_ref.description = f'{merchant_ref.timestamp} Fee Collection {merchant_ref.reference}'
+        merchant_ref.save()
+        return render(request, "Finance/status.html", {'status': merchant_ref.status})
