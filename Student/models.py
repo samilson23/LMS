@@ -123,10 +123,13 @@ class FeeStatement(models.Model):
     debit = models.FloatField(default=0.0)
     credit = models.FloatField(default=0.0)
     balance = models.FloatField(default=0.0)
-    timestamp = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.doc_no
+
+    class Meta:
+        get_latest_by = 'timestamp'
 
 
 class FeeStructure(models.Model):

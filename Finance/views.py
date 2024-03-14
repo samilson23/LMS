@@ -222,71 +222,60 @@ class Receipts(LoginRequiredMixin, ListView):
         return STDTransaction.objects.all()
 
 
-def check_payment_details(reference):
-    consumer_key = settings.PESAPAL_CONSUMER_SECRET
-    consumer_secret = settings.PESAPAL_CONSUMER_SECRET
+# def check_payment_details(reference, order_tracking_id):
+#     consumer_key = settings.PESAPAL_CONSUMER_SECRET
+#     consumer_secret = settings.PESAPAL_CONSUMER_SECRET
+#
+#     url = settings.PESAPAL_QUERY_STATUS_LINK
+#     params = {
+#         'pesapal_merchant_reference': reference,
+#         'pesapal_transaction_tracking_id': order_tracking_id
+#         'consumer_key': consumer_key,
+#         'consumer_secret': consumer_secret
+#     }
+#     response = requests.get(url, params=params)
+#
+#     if response.status_code == 200:
+#         pesapal_response = response.json()
+#         pesapal_transaction_tracking_id = pesapal_response.get('pesapal_transaction_tracking_id')
+#         payment_method = pesapal_response.get('payment_method')
+#
+#         return pesapal_transaction_tracking_id, payment_method
+#     else:
+#         return HttpResponse('Transaction does not exist')
 
-    url = settings.PESAPAL_QUERY_STATUS_LINK
-    params = {
-        'pesapal_merchant_reference': reference,
-        'consumer_key': consumer_key,
-        'consumer_secret': consumer_secret
-    }
-    response = requests.get(url, params=params)
 
-    if response.status_code == 200:
-        pesapal_response = response.json()
-        pesapal_transaction_tracking_id = pesapal_response.get('pesapal_transaction_tracking_id')
-        payment_method = pesapal_response.get('payment_method')
-
-        return pesapal_transaction_tracking_id, payment_method
-    else:
-        return HttpResponse('Transaction does not exist')
-
-
-class CheckStatus(LoginRequiredMixin, View):
+class UpdatePayment(LoginRequiredMixin, View):
     @staticmethod
     def get(request, reference):
         trans = STDTransaction.objects.get(reference=reference)
         user = User.objects.get(id=trans.paid_by.id)
         merchant_reference = trans.reference
-        status = pesapal_ops3.get_payment_status_by_mercharnt_ref(merchant_reference).decode('utf-8')
-        p_status = str(status).split('=')
-        if len(p_status) >= 2:
-            comp_status = str(status).split('=')[1]
-            if comp_status == 'COMPLETED':
-                trans.mercharnt_reference = merchant_reference
-                trans.payment_method = 'Direct Deposit'
-                trans.status = comp_status
-                description = f'{trans.timestamp} Fee Collection {merchant_reference}'
-                trans.description = description
-                trans.save()
-                student = Students.objects.get(user=user)
-                student.total_paid += float(trans.amount)
-                student.fee_balance -= float(trans.amount)
-                student.save()
-                FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description,
-                                            credit=trans.amount,
-                                            balance=student.fee_balance)
-                return render(request, "Finance/status.html", {'status': comp_status})
-            elif comp_status == 'PENDING':
-                trans.mercharnt_reference = merchant_reference
-                trans.payment_method = 'Direct Deposit'
-                trans.status = 'COMPLETED'
-                description = f'{trans.timestamp} Fee Collection {merchant_reference}'
-                trans.description = description
-                trans.save()
-                student = Students.objects.get(user=user)
-                student.total_paid += float(trans.amount)
-                student.fee_balance -= float(trans.amount)
-                student.save()
-                FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description,
-                                            credit=trans.amount,
-                                            balance=student.fee_balance)
-                return render(request, "Finance/status.html", {'status': comp_status})
+        order_tracking_id = trans.mercharnt_reference
+        detailed_data = pesapal_ops3.get_detailed_order_status(merchant_reference, order_tracking_id).decode('utf-8')
+        p_status = str(detailed_data).split(',')
+        if len(p_status) >= 3:
+            comp_status = str(detailed_data).split(',')[2]
+            if trans.status == 'COMPLETED':
+                messages.info(request, 'Transaction Has already been updated')
             else:
-                messages.error(request, 'Transaction Does not Exist')
-                return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})
+                if comp_status == 'COMPLETED' or comp_status == 'PENDING':
+                    trans.payment_method = str(detailed_data).split(',')[1]
+                    trans.status = 'COMPLETED'
+                    description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+                    trans.description = description
+                    trans.save()
+                    student = Students.objects.get(user=user)
+                    student.total_paid += float(trans.amount)
+                    student.fee_balance -= float(trans.amount)
+                    student.save()
+                    FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description,
+                                                credit=trans.amount,
+                                                balance=student.fee_balance)
+                    return render(request, "Finance/status.html", {'status': detailed_data})
+                else:
+                    messages.error(request, 'Transaction Does not Exist')
+                    return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})
         else:
             messages.error(request, 'Transaction Does not Exist')
-            return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})
+        return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})

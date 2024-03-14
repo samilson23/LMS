@@ -244,147 +244,163 @@ def generate_ref_no(request):
 def create_fee_statement(request, stage_id):
     student = Students.objects.get(user=request.user)
     fee_structure_data = FeeStructure.objects.filter(stage__id=stage_id)
-    for entry1 in fee_structure_data:
+    for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
-        tuition = f'Tuition Fees for {entry1.stage.stage}'
-        balance1 = float(entry1.tuition)
-        if entry1.tuition != 0:
-            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry1.tuition, description=tuition,
-                                    balance=balance1)
-    for entry2 in fee_structure_data:
-        doc_no = randint(10000, 999999)
-        ref = f'TRANS{doc_no}'
-        student_activity = f'Student Activity Fee for {entry2.stage.stage}'
-        balance = float(entry2.tuition + entry2.student_activity)
-        if entry2.student_activity != 0:
-            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.student_activity, description=student_activity,
-                                    balance=balance)
-    for entry3 in fee_structure_data:
-        doc_no = randint(10000, 999999)
-        ref = f'TRANS{doc_no}'
-        student_id_card = f'Student ID Card Fee {entry3.stage.stage}'
-        balance = float(entry3.tuition + entry3.student_id_card + entry3.student_activity)
-        if entry2.student_id_card != 0:
-            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.student_id_card, description=student_id_card,
-                                    balance=balance)
-
-    for entry3 in fee_structure_data:
-        doc_no = randint(10000, 999999)
-        ref = f'TRANS{doc_no}'
-        computer_fee = f'Computer Fee {entry3.stage.stage}'
-        balance = float(entry3.tuition + entry3.student_id_card + entry3.student_activity + entry3.computer_fee)
-        if entry2.computer_fee != 0:
-            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry2.computer_fee, description=computer_fee,
+        tuition = f'Tuition Fees for {entry.stage.stage}'
+        if instance is not None and float(instance.balance) < 0:
+            balance = float(instance.balance + entry.tuition)
+        else:
+            balance = float(entry.tuition)
+        if entry.tuition != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.tuition, description=tuition,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        student_activity = f'Student Activity Fee for {entry.stage.stage}'
+        balance = float(instance.balance + entry.student_activity)
+        if entry.student_activity != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_activity, description=student_activity,
+                                    balance=balance)
+    for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        student_id_card = f'Student ID Card Fee {entry.stage.stage}'
+
+        balance = float(instance.balance + entry.student_activity)
+        if entry.student_id_card != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_id_card, description=student_id_card,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        doc_no = randint(10000, 999999)
+        ref = f'TRANS{doc_no}'
+        computer_fee = f'Computer Fee {entry.stage.stage}'
+
+        balance = float(instance.balance + entry.computer_fee)
+        if entry.computer_fee != 0:
+            FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.computer_fee, description=computer_fee,
+                                    balance=balance)
+
+    for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         examination_fee = f'Examination Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee)
+
+        balance = float(instance.balance + entry.examination_fee)
         if entry.examination_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.examination_fee, description=examination_fee,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         internet_connectivity = f'Internet Connectivity {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity)
+
+        balance = float(instance.balance + entry.internet_connectivity)
         if entry.internet_connectivity != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.internet_connectivity, description=internet_connectivity,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         kuccps_placement_fee = f'Kuccps Placement Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee)
+
+        balance = float(instance.balance + entry.kuccps_placement_fee)
         if entry.kuccps_placement_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.kuccps_placement_fee, description=kuccps_placement_fee,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         library_fee = f'Kuccps Placement Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee)
+
+        balance = float(instance.balance + entry.library_fee)
         if entry.library_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.library_fee, description=library_fee,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         maintenance_fee = f'Maintenance Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee)
+
+        balance = float(instance.balance + entry.maintenance_fee)
         if entry.maintenance_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.maintenance_fee, description=maintenance_fee,
                                     balance=balance)
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         medical_fee = f'Medical Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee)
+
+        balance = float(instance.balance + entry.medical_fee)
         if entry.medical_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.medical_fee, description=medical_fee,
                                     balance=balance)
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         student_organization = f'Student Organization Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee + entry.student_organization)
+
+        balance = float(instance.balance + entry.student_organization)
         if entry.student_organization != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_organization, description=student_organization,
                                     balance=balance)
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Quality Assurance Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee)
+
+        balance = float(instance.balance + entry.quality_assurance_fee)
         if entry.quality_assurance_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_organization, description=desc,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Registration Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee)
+
+        balance = float(instance.balance + entry.registration_fee)
         if entry.registration_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.registration_fee, description=desc,
                                     balance=balance)
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Amenity Fee {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee + entry.amenity_fee)
+
+        balance = float(instance.balance + entry.amenity_fee)
         if entry.amenity_fee != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.amenity_fee, description=desc,
                                     balance=balance)
 
     for entry in fee_structure_data:
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Attachment {entry.stage.stage}'
-        balance = float(entry.tuition + entry.student_id_card + entry.student_activity + entry.computer_fee + entry.examination_fee +
-                        entry.internet_connectivity + entry.kuccps_placement_fee + entry.library_fee + entry.maintenance_fee +
-                        entry.medical_fee + entry.student_organization + entry.quality_assurance_fee + entry.registration_fee + entry.amenity_fee + entry.attachment)
+
+        balance = float(instance.balance + entry.attachment)
         if entry.attachment != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.attachment, description=desc,
                                     balance=balance)
@@ -471,7 +487,7 @@ class UnitsRegistration(LoginRequiredMixin, View):
             return redirect('STDDashboard')
         else:
             student = Students.objects.get(user=request.user.id)
-            if float(student.fee_balance) == 0:
+            if float(student.fee_balance) <= 0:
                 try:
                     stage = SemesterReg.objects.get(current=True, student=request.user.id)
                     pending_units = RegistrationReport.objects.filter(submitted=False, status=True, student=request.user.id)
@@ -1175,6 +1191,10 @@ class Checkout(LoginRequiredMixin, View):
         return render(request, 'Financials/Checkout.html', {'amount': amount})
 
 
+def generate_order_tracking():
+    return str(uuid.uuid4())
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
     template_name = 'Financials/Checkout.html'
@@ -1198,6 +1218,8 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
             LastName = user.last_name
             Email = user.email
             PhoneNumber = student.phone_number
+            order_tracking_id = generate_order_tracking()
+            print(order_tracking_id)
             order_info = {
                 'first_name': FirstName,
                 'last_name': LastName,
@@ -1205,9 +1227,10 @@ class SubmitPayment(LoginRequiredMixin, PaymentRequestMixin, TemplateView):
                 'description': Description,
                 'reference': Reference,  # some object id
                 'email': Email,
+                'order_tracking_id': order_tracking_id
             }
             STDTransaction.objects.create(paid_by=AdmissionNumber, amount=Amount, reference=Reference,
-                                       status='PENDING')
+                                       status='PENDING', mercharnt_reference=order_tracking_id)
             context['pesapal_url'] = self.get_payment_url(**order_info)
             return context
 
@@ -1218,20 +1241,16 @@ class CompleteTransaction(LoginRequiredMixin, View):
         params = request.GET
         merchant_reference = params['pesapal_merchant_reference']
         transaction_tracking_id = params['pesapal_transaction_tracking_id']
-        print(merchant_reference)
-        print(transaction_tracking_id)
         status = pesapal_ops3.get_payment_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         detailed_data = pesapal_ops3.get_detailed_order_status(merchant_reference, transaction_tracking_id).decode('utf-8')
         p_status = str(status).split('=')[1]
         payment_method = str(detailed_data).split(',')[1]
-        print(payment_method)
         trans = STDTransaction.objects.get(reference=merchant_reference)
         user = User.objects.get(id=trans.paid_by.id)
         description = f'{trans.timestamp} Fee Collection {merchant_reference}'
         trans.description = description
         trans.status = p_status
         trans.payment_method = payment_method
-        trans.mercharnt_reference = transaction_tracking_id
         trans.save()
         student = Students.objects.get(user=user)
         student.total_paid += float(trans.amount)
