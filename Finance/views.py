@@ -257,7 +257,7 @@ class CheckStatus(LoginRequiredMixin, View):
             if comp_status == 'COMPLETED':
                 trans.mercharnt_reference = merchant_reference
                 trans.payment_method = 'Direct Deposit'
-                trans.status = p_status
+                trans.status = comp_status
                 description = f'{trans.timestamp} Fee Collection {merchant_reference}'
                 trans.description = description
                 trans.save()
@@ -268,7 +268,22 @@ class CheckStatus(LoginRequiredMixin, View):
                 FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description,
                                             credit=trans.amount,
                                             balance=student.fee_balance)
-                return render(request, "Finance/status.html", {'status': p_status})
+                return render(request, "Finance/status.html", {'status': comp_status})
+            elif comp_status == 'PENDING':
+                trans.mercharnt_reference = merchant_reference
+                trans.payment_method = 'Direct Deposit'
+                trans.status = 'COMPLETED'
+                description = f'{trans.timestamp} Fee Collection {merchant_reference}'
+                trans.description = description
+                trans.save()
+                student = Students.objects.get(user=user)
+                student.total_paid += float(trans.amount)
+                student.fee_balance -= float(trans.amount)
+                student.save()
+                FeeStatement.objects.create(user=user, doc_no=merchant_reference, description=description,
+                                            credit=trans.amount,
+                                            balance=student.fee_balance)
+                return render(request, "Finance/status.html", {'status': comp_status})
             else:
                 messages.error(request, 'Transaction Does not Exist')
                 return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})
