@@ -75,7 +75,9 @@
                               {% endif %}
                             </div>
                             <div class="col-xs-4">
-                              <a href="{% url 'PaymentDetails' object.reference %}" class="btn btn-warning btn-sm text-sm">Payment Details</a>
+                              {% if object.status == 'PENDING' %}
+                                <a href="{% url 'PaymentDetails' object.reference %}" class="btn btn-warning btn-sm text-sm">Payment Details</a>
+                              {% endif %}
                             </div>
                           </div>
                         </td>
