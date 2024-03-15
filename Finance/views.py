@@ -1,25 +1,24 @@
-import urllib
+import email
+import imaplib
+import re
 
-import oauth2 as oauth
-import requests
+from bs4 import BeautifulSoup
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 from django.views.generic.base import View
 
-from Finance.forms.CreateFeeStructureForm import CreateFeeStructureForm
-from Finance.models import *
-from Finance.forms.CreateProfile import *
 from Faculty.models import *
+from Finance.forms.CreateFeeStructureForm import CreateFeeStructureForm
+from Finance.forms.CreateProfile import *
+from Finance.models import *
 from Pesapal import pesapal_ops3
 from Pesapal.models import STDTransaction
 from Student.models import FeeStructure, Students, FeeStatement
-from django_pesapal import conf as settings
-from django_pesapal.views import PaymentRequestMixin
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -106,7 +105,7 @@ class SubmitFeeStructure(LoginRequiredMixin, View):
         stages = Stage.objects.filter(department=dept_id.id)
         form = CreateFeeStructureForm(request.POST or None)
         try:
-            feestructure = FeeStructure.objects.get(id=stage_id.id)
+            feestructure = FeeStructure.objects.get(stage__id=stage_id.id)
             update_form = CreateFeeStructureForm(request.POST or None, instance=feestructure)
             if update_form.is_valid():
                 update_form.save()
@@ -279,3 +278,57 @@ class UpdatePayment(LoginRequiredMixin, View):
         else:
             messages.error(request, 'Transaction Does not Exist')
         return render(request, 'Finance/Receipts.html', {'student': trans.paid_by.hashid, 'object_list': STDTransaction.objects.filter(paid_by__hashid=user.hashid)})
+
+
+def extract_body(msg):
+    body = ''
+    if msg.is_multipart():
+        for part in msg.walk():
+            content_type = part.get_content_type()
+            content_disposition = str(part.get("Content-Disposition"))
+
+            if "text/plain" in content_type and "attachment" not in content_disposition:
+                body += part.get_payload(decode=True).decode("utf-8", "ignore")
+            elif "text/html" in content_type and "attachment" not in content_disposition:
+                html_content  = part.get_payload(decode=True).decode("utf-8", "ignore")
+                soup = BeautifulSoup(html_content, 'html.parser')
+                table = soup.find('table')
+                if table:
+                    body += soup.get_text()
+    else:
+        body = msg.get_payload(decode=True).decode("utf-8", "ignore")
+    return body
+
+
+def extract_data(reference):
+    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    mail.login('sammymasinde830@gmail.com', 'mfbajkzewsjumfss')
+    mail.select('inbox')
+
+    result, data = mail.search(None, '(BODY "{}")'.format(reference))
+
+    extracted_data = []
+
+    for num in data[0].split():
+        result, data = mail.fetch(num, '(RFC822)')
+        raw_mail = data[0][1]
+        msg = email.message_from_bytes(raw_mail)
+
+        body = extract_body(msg)
+        extracted_data.append({
+            'body': body
+        })
+
+    mail.close()
+    mail.logout()
+
+    return extracted_data
+
+class VerifyPayment(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request, reference):
+        merchant_ref = STDTransaction.objects.get(reference=reference)
+        payment_details = extract_data(merchant_ref.reference)
+        data = str(payment_details).split(',')
+        print(data)
+        return render(request, 'Finance/PaymentDetails.html', {'payment_details': payment_details})

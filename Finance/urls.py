@@ -17,4 +17,5 @@ urlpatterns = [
     path('StudentReceipts/<student>', StudentReceipts.as_view(), name='StudentReceipts'),
     path('Receipts/', Receipts.as_view(), name='AllReceipts'),
     path('UpdatePayment/<reference>', UpdatePayment.as_view(), name='PaymentDetails'),
+    path('VerifyPayment/<reference>', VerifyPayment.as_view(), name='VerifyPayment'),
 ]

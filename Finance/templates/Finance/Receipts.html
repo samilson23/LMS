@@ -49,11 +49,11 @@
                       <th>Date</th>
                       <th>Amount</th>
                       <th>Reference</th>
-                      <th>Mercharnt Ref</th>
+                      <th>Order ID</th>
                       <th>Description</th>
                       <th>Status</th>
                       <th>Method</th>
-                      <th>Action</th>
+                      <th width="200px">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,15 +67,18 @@
                         <td>{{object.description}}</td>
                         <td>{{object.status}}</td>
                         <td>{{object.payment_method}}</td>
-                        <td style="width: 100px">
+                        <td>
                           <div class="row">
-                            <div class="col-xs-4">
-                              <a href="" class="btn btn-danger btn-sm text-sm">Revoke</a>
-                            </div>
                             <div class="col-xs-4">
                                 {% if object.status == 'PENDING' %}
                                   <a href="{% url 'PaymentDetails' object.reference %}" class="btn btn-success btn-sm text-sm">Approve</a>
                                 {% endif %}
+                            </div>
+                            <div class="col-xs-4">
+                              <a href="" class="btn btn-danger btn-sm text-sm">Revoke</a>
+                            </div>
+                            <div class="col-xs-4">
+                              <a href="{% url 'VerifyPayment' object.reference %}" class="btn btn-info btn-sm text-sm">Verify</a>
                             </div>
                           </div>
                         </td>
