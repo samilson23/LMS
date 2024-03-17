@@ -24,9 +24,18 @@ from Student.models import FeeStructure, Students, FeeStatement
 class Dashboard(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
+        fee_balance = Students.objects.aggregate(total_fee_balance=models.Sum('fee_balance'))
+        total_paid = Students.objects.aggregate(total_fee_paid=models.Sum('total_paid'))
+        total_billed = Students.objects.aggregate(total_fee_billed=models.Sum('total_billed'))
+        total_balance = fee_balance['total_fee_balance']
+        total_fee_paid = total_paid['total_fee_paid']
+        total_fee_billed = total_billed['total_fee_billed']
         queryset = Finance.objects.get(user=request.user.id)
         context = {
             'queryset': queryset,
+            'total_balance': total_balance,
+            'total_fee_billed': total_fee_billed,
+            'total_fee_paid': total_fee_paid,
             'user_form': FinanceDetails(request.POST or None, instance=request.user),
             'profile_form': CreateFinanceProfile(request.POST or None, instance=queryset)
         }

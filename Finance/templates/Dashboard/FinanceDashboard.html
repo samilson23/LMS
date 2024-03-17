@@ -81,74 +81,58 @@
     </section>
     <section class="content">
       <div class="row">
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-aqua">
-              <div class="inner">
-                <h3></h3>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
-                <p>Leave(s) Taken</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-calendar-times-o"></i>
-              </div>
-              <a href="" class="small-box-footer">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3></h3>
+            <div class="info-box-content">
+              <span class="info-box-text">Total Billed</span>
+              <span class="info-box-number">Ksh.{{total_fee_billed}}</span>
 
-                <p>Courses</p>
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
               </div>
-              <div class="icon">
-                <i class="fa fa-book"></i>
-              </div>
-              <a href="" class="small-box-footer">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
             </div>
+            <!-- /.info-box-content -->
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-blue">
-              <div class="inner">
-                <h3></h3>
-
-                <p>Lecturer(s)</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-users"></i>
-              </div>
-              <a href="" class="small-box-footer">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-orange">
-              <div class="inner">
-                <h3></h3>
-
-                <p>Students</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-users"></i>
-              </div>
-              <a href="" class="small-box-footer">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
+          <!-- /.info-box -->
         </div>
+        <!-- /.col -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="ion ion-pie-graph"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Paid</span>
+              <span class="info-box-number">Ksh.{{total_fee_paid}}</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="ion ion-stats-bars"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Fee Balance</span>
+              <span class="info-box-number">Ksh.{{total_balance}}</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
       <div class="row">
           <div class="col-xs-5">
             <!-- TABLE: LATEST ORDERS -->

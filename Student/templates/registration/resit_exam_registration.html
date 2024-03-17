@@ -271,7 +271,16 @@
                 location.reload()
               })
             }
-            if(response=="Updated"){
+            if(response == 'Not Enough Balance'){
+                Swal.fire(
+                    '',
+                    'Not Enough Balance',
+                    'warning'
+                ).then(() => {
+                    location.reload()
+                })
+            }
+            if(response== "Updated"){
               Swal.fire(
                  '',
                  'Units updated successfully',

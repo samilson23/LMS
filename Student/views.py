@@ -760,13 +760,17 @@ class FetchFailedUnits(LoginRequiredMixin, View):
         year_id = request.POST.get("year")
         if stage_id != "" and year_id != "":
             user_id = User.objects.get(id=request.user.id)
-            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id, hod_approved=True, admin_approved=True)
+            unit = Results.objects.filter(student=user_id, stage=stage_id, year=year_id, hod_approved=True, admin_approved=True, grade_points=0)
             list_data = []
             for Units in unit:
-                report = RegistrationReport.objects.filter(unit=Units.unit.id, supplementary=False, student=user_id)
-                if Units.grade == 'E' and report.exists():
+                report = RegistrationReport.objects.filter(unit=Units.unit.id, resit=False, student=user_id)
+                resit_fee = float(unit.count() * 500)
+                student = Students.objects.get(user=request.user)
+                if Units.grade == 'E' and report.exists() and float(-resit_fee) > float(student.fee_balance):
                     data_small = {"id": Units.unit.id, "code": Units.unit.unit_code, "name": Units.unit.name + ""}
                     list_data.append(data_small)
+                else:
+                    list_data = []
         else:
             list_data = []
         return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
@@ -779,11 +783,23 @@ class SubmitFailedUnits(LoginRequiredMixin, View):
         unit_data = request.POST.get("unit_data")
         json_student = json.loads(unit_data)
         for stud in json_student:
+            doc_no = randint(10000, 999999)
+            ref = f'TRANS{doc_no}'
             unit_id = Unit.objects.get(id=stud['id'])
             reg_report = RegistrationReport.objects.get(unit=unit_id, student=request.user.id)
             reg_report.resit = True
             reg_report.current = True
-            reg_report.save()
+            description = f'Resit billing for {unit_id.unit_code}'
+            instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+            student = Students.objects.get(user=request.user)
+            resit_fee = float(instance.balance + 500)
+            if -500 > float(instance.balance) and float(instance.balance) < 0:
+                reg_report.save()
+                FeeStatement.objects.create(user=request.user, description=description, doc_no=ref, debit=500, balance=resit_fee)
+                student.total_billed += 500
+                student.fee_balance += 500
+                student.save()
+            return HttpResponse('Not Enough Balance')
         return HttpResponse('OK')
 
 
