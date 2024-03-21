@@ -81,10 +81,7 @@
                         {% endif %}
                       </td>
                       <td>
-                        <form action="{% url 'AdminDeregister' instance.hashid %}" method="post">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger btn-block">Remove</button>
-                        </form>
+                          <a href="{% url 'AdminDeregister' instance.id %}" class="btn btn-danger btn-block">Remove</a>
                       </td>
                     {% endfor %}
                     </tbody>

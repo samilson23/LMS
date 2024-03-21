@@ -124,38 +124,6 @@
               <div class="box-body" id="units_data"></div>
               <div class="box-header">
                         <div class="box-title">
-                            <h6><u>Selected units</u></h6>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table" id="list_unit">
-                              <thead>
-                              <tr>
-                                <th>Unit Code</th>
-                                <th>Name</th>
-                                <th>Remove/deregister</th>
-                              </tr>
-                              </thead>
-                              <tbody>
-                              {% for instance in pending_units %}
-                                <tr>
-                                  <td><label class="text-primary">{{instance.unit.unit_code}}</label></td>
-                                  <td>{{instance.unit.name}}</td>
-                                  <td><a href="{% url 'DeregisterResit' instance.hashid %}" class="text-green"><u>Remove/deregister</u></a></td>
-                                </tr>
-                              {% endfor %}
-                              </tbody>
-                            </table>
-                            {% if reg_exists %}
-                                <div>
-                                      <a href="{% url 'SaveFailedUnits' %}"  class="btn btn-info">Submit</a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-              <div class="box-header">
-                        <div class="box-title">
                             <h6><u>Registered Units</u></h6>
                         </div>
                         <div class="box-tools">
@@ -203,24 +171,25 @@
     $("#select_stage").change(function(){
       fetch_units();
     });
+  })
     toastr.options = { "closeButton": false, "debug": false, "newestOnTop": true,
                 "progressBar": false, "positionClass": "toast-top-center", "preventDuplicates": true,
                 "onclick": null, "showDuration": "300", "hideDuration": "1000", "timeOut": "5000",
                 "extendedTimeOut": "1000", "showEasing": "swing", "hideEasing": "linear",
                 "showMethod": "fadeIn", "hideMethod": "fadeOut" };
     function fetch_units(){
-      var stage=$("#select_stage").val();
-      var year=$("#select_year").val();
+      let stage=$("#select_stage").val();
+      let year=$("#select_year").val();
 
 
       $.ajax({
-        url:'{% url 'get_failed_units' %}',
+        url:"{% url 'get_failed_units' %}",
         type:'POST',
         data:{stage:stage,year:year},
         success: function(response){
-            var json_data=JSON.parse(response);
+            let json_data = JSON.parse(response);
             console.log(json_data)
-            var div_data="<div><div class='row'>";
+            let div_data = "<div><div class='row'>";
             for(key in json_data){
                 div_data+="<div class='col-xs-6'><div class='unit_data_success'><div class='form-check'><table><tr><td><input type='checkbox' name='units_data[]' value='"+json_data[key]['id']+"'></td></tr><tr><td><label class='form-check-label text-bold'>"+json_data[key]['code']+"</label></tr><tr><td><label class='form-check-label'>"+json_data[key]['name']+"</label></td></tr></table></div></div></div>";
             }
@@ -230,7 +199,6 @@
                 div_data+="<div class='col-xs-6 unit_data_error'>No units found</div>";
             }else{
                 div_data+="<button id='submit_units' class='btn btn-info' type='button'>Register</button>";
-                div_data+="<div id='spinner' style='display:none;'><i class='fa fa-spinner fa-spin fa-3x'></i>Submitting...</div>";
             }
             div_data+="</div>";
             $("#units_data").html(div_data);
@@ -241,57 +209,31 @@
             {% endautoescape %}
         }
       })
+    }
     $(document).on("click","#submit_units",function(){
-        var unit_data=$("input[name='units_data[]']" ).map(function(){
+        let unit_data=$("input[name='units_data[]']" ).map(function(){
           if($(this).is(":checked")){
             return {"id":$(this).val(),"status":1};
           }
           else{
-            return {"id":$(this).val(),"status":0 };
+            return {"id":$(this).val(),"status":0};
           }
         }).get()
-        var year_id=$("#select_year").val();
-        var stage_id=$("#select_stage").val();
-        var student_id=$("#user_id").val();
-        unit_data=JSON.stringify(unit_data)
+        let json_data = JSON.stringify(unit_data)
+        console.log(json_data)
         $.ajax({
-          url:'{% url 'submit_failed_units' %}',
+          url:"{% url 'submit_failed_units' %}",
           type:'POST',
-          data:{unit_data:unit_data,year_id:year_id,student_id:student_id,stage_id:stage_id},
-          beforeSend: function(){
-                $('#spinner').show();
-          },
+          data:{json_data:json_data},
           success: function(response){
-            if(response=="OK"){
-              Swal.fire(
+            Swal.fire(
                  '',
                  'Units submitted successfully',
                  'success',
+                  ''
               ).then(() => {
-                location.reload()
-              })
-            }
-            if(response == 'Not Enough Balance'){
-                Swal.fire(
-                    '',
-                    'Not Enough Balance',
-                    'warning'
-                ).then(() => {
-                    location.reload()
-                })
-            }
-            if(response== "Updated"){
-              Swal.fire(
-                 '',
-                 'Units updated successfully',
-                 'success',
-              ).then(() => {
-                location.reload()
-              })
-            }
-          },
-          complete: function(){
-                $('#spinner').hide();
+                  location.reload()
+            })
           },
           error: function(){
             {% autoescape off %}
@@ -300,6 +242,4 @@
           },
         })
     })
-  }
-})
 </script>

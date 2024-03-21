@@ -245,7 +245,7 @@ def create_fee_statement(request, stage_id):
     student = Students.objects.get(user=request.user)
     fee_structure_data = FeeStructure.objects.filter(stage__id=stage_id)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         tuition = f'Tuition Fees for {entry.stage.stage}'
@@ -258,7 +258,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         student_activity = f'Student Activity Fee for {entry.stage.stage}'
@@ -267,18 +267,18 @@ def create_fee_statement(request, stage_id):
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_activity, description=student_activity,
                                     balance=balance)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         student_id_card = f'Student ID Card Fee {entry.stage.stage}'
 
-        balance = float(instance.balance + entry.student_activity)
+        balance = float(instance.balance + entry.student_id_card)
         if entry.student_id_card != 0:
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_id_card, description=student_id_card,
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         computer_fee = f'Computer Fee {entry.stage.stage}'
@@ -289,7 +289,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         examination_fee = f'Examination Fee {entry.stage.stage}'
@@ -300,7 +300,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         internet_connectivity = f'Internet Connectivity {entry.stage.stage}'
@@ -311,7 +311,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         kuccps_placement_fee = f'Kuccps Placement Fee {entry.stage.stage}'
@@ -322,7 +322,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         library_fee = f'Kuccps Placement Fee {entry.stage.stage}'
@@ -333,7 +333,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         maintenance_fee = f'Maintenance Fee {entry.stage.stage}'
@@ -343,7 +343,7 @@ def create_fee_statement(request, stage_id):
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.maintenance_fee, description=maintenance_fee,
                                     balance=balance)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         medical_fee = f'Medical Fee {entry.stage.stage}'
@@ -353,7 +353,7 @@ def create_fee_statement(request, stage_id):
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.medical_fee, description=medical_fee,
                                     balance=balance)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         student_organization = f'Student Organization Fee {entry.stage.stage}'
@@ -363,7 +363,7 @@ def create_fee_statement(request, stage_id):
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.student_organization, description=student_organization,
                                     balance=balance)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Quality Assurance Fee {entry.stage.stage}'
@@ -374,7 +374,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Registration Fee {entry.stage.stage}'
@@ -384,7 +384,7 @@ def create_fee_statement(request, stage_id):
             FeeStatement.objects.create(user=request.user, doc_no=ref, debit=entry.registration_fee, description=desc,
                                     balance=balance)
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Amenity Fee {entry.stage.stage}'
@@ -395,7 +395,7 @@ def create_fee_statement(request, stage_id):
                                     balance=balance)
 
     for entry in fee_structure_data:
-        instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
+        instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
         doc_no = randint(10000, 999999)
         ref = f'TRANS{doc_no}'
         desc = f'Attachment {entry.stage.stage}'
@@ -780,26 +780,25 @@ class FetchFailedUnits(LoginRequiredMixin, View):
 class SubmitFailedUnits(LoginRequiredMixin, View):
     @staticmethod
     def post(request):
-        unit_data = request.POST.get("unit_data")
+        unit_data = request.POST.get("json_data")
         json_student = json.loads(unit_data)
         for stud in json_student:
             doc_no = randint(10000, 999999)
             ref = f'TRANS{doc_no}'
             unit_id = Unit.objects.get(id=stud['id'])
             reg_report = RegistrationReport.objects.get(unit=unit_id, student=request.user.id)
-            reg_report.resit = True
-            reg_report.current = True
-            description = f'Resit billing for {unit_id.unit_code}'
-            instance = FeeStatement.objects.filter(user=request.user).order_by('-timestamp').first()
-            student = Students.objects.get(user=request.user)
-            resit_fee = float(instance.balance + 500)
-            if -500 > float(instance.balance) and float(instance.balance) < 0:
-                reg_report.save()
+            reg_report.resit = stud['status']
+            reg_report.current = stud['status']
+            reg_report.save()
+            if stud['status']:
+                description = f'Resit billing for {unit_id.unit_code}: {unit_id.name}'
+                instance = FeeStatement.objects.filter(user=request.user).order_by('-id').first()
+                resit_fee = float(instance.balance + 500)
                 FeeStatement.objects.create(user=request.user, description=description, doc_no=ref, debit=500, balance=resit_fee)
+                student = Students.objects.get(user=request.user)
                 student.total_billed += 500
                 student.fee_balance += 500
                 student.save()
-            return HttpResponse('Not Enough Balance')
         return HttpResponse('OK')
 
 
@@ -810,24 +809,6 @@ class DeregisterResit(LoginRequiredMixin, SuccessMessageMixin, View):
         queryset.status = False
         queryset.save()
         messages.success(request, 'Unit deregistration successful')
-        return redirect('ResitExamRegistration')
-
-
-class SaveFailedUnits(LoginRequiredMixin, View):
-    @staticmethod
-    def get(request):
-        reg_report = RegistrationReport.objects.filter(status=True, submitted=False, student=request.user.id)
-        user_id = User.objects.get(id=request.user.id)
-        for unit in reg_report:
-            units = Unit.objects.get(id=unit.unit.id)
-            unit.submitted = True
-            unit.save()
-            result = Results.objects.get(student=user_id, unit=units)
-            result.current = True
-            result.hod_approved = False
-            result.admin_approved = False
-            result.save()
-            messages.success(request, 'Units registration successful')
         return redirect('ResitExamRegistration')
 
 
@@ -931,7 +912,7 @@ class DownloadSupCard(LoginRequiredMixin, View):
         pdf = render_to_pdf('pdf/supplementary_card.html', context)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = 'SupCard-%s.pdf' % request.user.username.replace('/', '')
-        content = 'inline; filename=%s' % filename
+        content = 'attachment; filename=%s' % filename
         response['Content-Disposition'] = content
         return response
 
@@ -971,7 +952,7 @@ class DownloadResitCard(LoginRequiredMixin, View):
         pdf = render_to_pdf('pdf/resit_card.html', context)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = 'ResitCard-%s.pdf' % request.user.username.replace('/', '')
-        content = 'inline; filename=%s' % filename
+        content = 'attachment; filename=%s' % filename
         response['Content-Disposition'] = content
         return response
 
@@ -1326,7 +1307,6 @@ class FeeStructures(LoginRequiredMixin, View):
 
 def get_fee_statement(request, student):
     fee_statement = FeeStatement.objects.filter(user__hashid=student)
-    print(fee_statement)
     if fee_statement.exists():
         context = {
             'queryset': fee_statement,

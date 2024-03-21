@@ -60,7 +60,7 @@
                           <td>{{object.timestamp}}</td>
                           <td>{{object.reference}}</td>
                           <td>{{object.payment_method}}</td>
-                          <td>{{object.paid_by.first_name}}</td>
+                          <td>{{object.paid_by.last_name|upper}}, {{object.paid_by.first_name|upper}} {{object.paid_by.middle_name|upper}}</td>
                           <td>{{object.amount}}</td>
                           <td>
                               <div class="row">

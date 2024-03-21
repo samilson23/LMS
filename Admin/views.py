@@ -996,15 +996,15 @@ class RegisteredUnits(LoginRequiredMixin, View):
 
 class Deregister(LoginRequiredMixin, View):
     @staticmethod
-    def post(request, pk):
-        queryset = RegistrationReport.objects.get(hashid=pk)
+    def get(request, pk):
+        queryset = RegistrationReport.objects.get(id=pk)
         return render(request, 'ResultsManagement/confirm_deregistration.html', {'queryset': queryset})
 
 
 class ConfirmDeregistration(LoginRequiredMixin, View):
     @staticmethod
     def post(request, pk):
-        queryset = RegistrationReport.objects.get(hashid=pk)
+        queryset = RegistrationReport.objects.get(id=pk)
         student = User.objects.get(id=queryset.student.id)
         unit = Unit.objects.get(id=queryset.unit.id)
         result = Results.objects.get(student=student, unit=unit)

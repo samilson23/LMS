@@ -43,7 +43,7 @@
                 <div class="box-title"><h4>Deregister Unit</h4></div>
               </div>
               <div class="box-body">
-                <form action="{% url 'ConfirmDeregistration' queryset.hashid %}" method="post">
+                <form action="{% url 'ConfirmDeregistration' queryset.id %}" method="post">
                     {% csrf_token %}
                   <div class="col-12">
                     <p>Are you sure you want to Deregister {{queryset.unit.unit_code}} ?</p>
