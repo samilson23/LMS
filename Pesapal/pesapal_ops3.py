@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 
 from . import pesapal_processor3
 
-pesapal_processor3.consumer_key = 'HRwr4SWhFF+LrthH83eBpC4t3tMKT37G'
-pesapal_processor3.consumer_secret = '8537Msq3uMjkqV8qzKM5eBakmv0='
+pesapal_processor3.consumer_key = ''
+pesapal_processor3.consumer_secret = ''
 pesapal_processor3.testing = False
 
 
