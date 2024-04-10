@@ -2,9 +2,9 @@ from . import pesapal_processor
 
 
 def post_transaction(Reference, FirstName, LastName, Email, PhoneNumber, Description, Amount, Type):
-    oauth_consumer_key = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW"
-    oauth_consumer_secret = "osGQ364R49cXKeOYSpaOnT++rHs="
-    oauth_callback = 'https://samilsonuniversity1-5c5d6f1676ed.herokuapp.com/Student/CompleteTransaction'
+    oauth_consumer_key = ""
+    oauth_consumer_secret = ""
+    oauth_callback = ''
 
     pesapal = pesapal_processor.PesaPal(oauth_consumer_key, oauth_consumer_secret, 'sandbox')
     pesapal.reference = Reference
