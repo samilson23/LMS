@@ -311,7 +311,7 @@ def extract_body(msg):
 
 def extract_data(reference):
     mail = imaplib.IMAP4_SSL('imap.gmail.com')
-    mail.login('sammymasinde830@gmail.com', 'mfbajkzewsjumfss')
+    mail.login('Email', 'app password')
     mail.select('inbox')
 
     result, data = mail.search(None, '(BODY "{}")'.format(reference))
